@@ -1,0 +1,27 @@
+# ~/.config/quickshell/qmldir
+
+#root config
+#   defalt path
+#~/.config/quickshell/ 
+singleton Style 1.0 Style.qml
+
+#taskbar
+#   defalt path
+#~/.config/quickshell/Bar_qml/
+Bar 1.0 Bar_qml/Bar.qml
+
+#media widget
+#   defalt path
+#~/.config/quickshell/Media_qml/
+singleton MprisService 1.0 Media_qml/MprisService.qml
+MediaWidget 1.0 Media_qml/MediaWidget.qml
+
+#klok widget
+#   defalt path
+#~/.config/quickshell/Klok_qml/
+KlokWidget 1.0 Klok_qml/KlokWidget.qml
+
+#~/.config/quickshell/Ui_elements_qml/
+Button_element 1.0 Ui_elements_qml/Button_element.qml
+MediaProgressBar 1.0 Ui_elements_qml/MediaProgressBar.qml
+ThumbnailArt 1.0 Ui_elements_qml/thumbnail_art_element.qml
