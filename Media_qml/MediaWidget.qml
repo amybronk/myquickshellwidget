@@ -52,15 +52,6 @@ PopupWindow {
 
     // --- UI ---
 
-    // Timer {
-    //     id: progressBarTimer
-    //     interval: Style.fastRepeatTimer
-    //     repeat: true
-    //     running: mediawindow.hasPlayer &&
-    //              mediawindow.player.playbackState === MprisPlaybackState.Playing
-    //     onTriggered: progerssBar.requestPaint()
-    // }
-
     Rectangle {
         id: mediarectangle
         anchors {
