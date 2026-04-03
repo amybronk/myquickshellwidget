@@ -31,13 +31,15 @@ Item {
     property int iconGrooteM: 18
     //property int iconGrooteL: 22
 
-    //property int radiusGrooteS:
+    property int radiusGrooteS: 4
     property int radiusGrooteM: 10
     //property int radiusGrooteL: 14
 
     property int exitTimer: 350
 
-    property int fastRepeatTimer: 250
+    property int fastRepeatTimer: 500
     property int slowRepeatTimer: 2000
+
+    property int sliderThickness: 8
 
 }

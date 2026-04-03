@@ -12,8 +12,8 @@ Rectangle {
     // Signaal als de gebruiker in de balk klikt om door te spoelen
     signal seekRequested(real newPosition)
 
-    height: 8
-    radius: 4
+    height: Style.sliderThickness
+    radius: Style.radiusGrooteS
     color: Qt.darker(Style.borderKleur, 1.2) // Donkere achtergrond voor de "goot"
 
     // De gekleurde balk die zich vult
@@ -28,7 +28,7 @@ Rectangle {
 
         // Vloeiende animatie zodat de balk niet schokt bij updates
         Behavior on width {
-            NumberAnimation { duration: 250; easing.type: Easing.OutQuad }
+            NumberAnimation { duration: Style.fastRepeatTimer; easing.type: Easing.OutQuad }
         }
     }
 
