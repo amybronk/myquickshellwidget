@@ -9,7 +9,7 @@ import "../"
 PopupWindow {
     // --- style base window ---
     id: mediawindow
-    visible: false
+    visible: true
     color: "transparent"
 
     property real currentPositionMs: MprisService.activePlayer ? MprisService.activePlayer.position : 0
@@ -42,12 +42,11 @@ PopupWindow {
     Timer {
         id: closeTimer
         interval: Style.exitTimer
-        onTriggered: mediawindow.visible = false
+        onTriggered: musiccontrol.active = false
     }
 
     function stopSluiten() { closeTimer.stop() }
     function startSluiten() { closeTimer.start() }
-    function toggle() { visible = !visible }
 
     // --- UI ---
     Rectangle {
