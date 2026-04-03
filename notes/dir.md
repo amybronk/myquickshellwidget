@@ -12,5 +12,7 @@ KlokWidget.qml = ~/.config/quickshell/Klok_qml/KlokWidget.qml
 Button_element.qml = ~/.config/quickshell/Ui_elements_qml/Button_element.qml
 MediaProgressBar.qml = ~/.config/quickshell/Ui_elements_qml/MediaProgressBar.qml
 thumbnail_art_element.qml = ~/.config/quickshell/Ui_elements_qml/thumbnail_art_element.qml
+Volume_element.qml = ~/.config/quickshell/Ui_elements_qml/Volume_element.qml
+MuteButton_element.qml = ~/.config/quickshell/Ui_elements_qml/MuteButton_element.qml
 
 dir.md = ~/.config/quickshell/notes/dir.md

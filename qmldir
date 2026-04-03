@@ -25,3 +25,5 @@ KlokWidget 1.0 Klok_qml/KlokWidget.qml
 Button_element 1.0 Ui_elements_qml/Button_element.qml
 MediaProgressBar 1.0 Ui_elements_qml/MediaProgressBar.qml
 ThumbnailArt 1.0 Ui_elements_qml/thumbnail_art_element.qml
+Volume_element 1.0 Ui_elements_qml/Volume_element.qml
+MuteButton 1.0 Ui_elements_qml/MuteButton_element.qml

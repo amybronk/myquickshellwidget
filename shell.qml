@@ -1,16 +1,11 @@
 import Quickshell
-import "." 
+import QtQuick
+import "."
 
 ShellRoot {
-	Bar {
-		id: barWindow
-	}
+    id: shellRoot
 
-	MediaWidget {
-		id: musiccontrol
-	}
-
-	KlokWidget {
-		id: klokwidget
-	}
+    Bar { id: barWindow }
+    MediaWidget { id: musiccontrol }
+    KlokWidget { id: klokwidget }
 }
