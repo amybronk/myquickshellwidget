@@ -1,4 +1,3 @@
-// MediaWidget.qml
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
@@ -60,10 +59,6 @@ PopupWindow {
 
         radius: Style.radiusGrooteM
 
-        // border {
-        //     color: Style.borderKleur
-        //     width: Style.borderSize
-        // }
         color: "transparent"
         
         // --- main window ---
@@ -157,12 +152,12 @@ PopupWindow {
                 }
 
                 ThumbnailArt {
-                    size: 180 // Lekker groot in de widget
+                    size: 180
                     anchors.horizontalCenter: parent.horizontalCenter
                     artUrl: MprisService.activePlayer?.metadata["mpris:artUrl"] ?? ""
                 }
 
-                // Hieronder komt je tekst (Titel/Artiest) en de ProgressBar
+                // (Titel/Artiest)
                 Text {
                     text: MprisService.activePlayer?.metadata["xesam:title"] ?? "Niets aan het spelen"
                     color: Style.textKleur
@@ -172,7 +167,6 @@ PopupWindow {
             }
 
             // --- progres bar --- 
-
             Timer {
                 id: progressTimer
                 interval: Style.fastRepeatTimer 
@@ -196,26 +190,22 @@ PopupWindow {
 
                 }
 
-                // Koppel de properties aan je service
                 position: currentPositionMs
                 length: MprisService.activePlayer ? MprisService.activePlayer.length : 1
                 isSeekable: MprisService.activePlayer ? MprisService.activePlayer.canSeek : false
 
-                // Wat er moet gebeuren als de gebruiker in de balk klikt
                 onSeekRequested: (newPos) => {
                     if (MprisService.activePlayer) {
                         MprisService.activePlayer.position = newPos;
-                        currentPositionMs = newPos; // Update visueel direct
+                        currentPositionMs = newPos;
                     }
                 }
             }
 
             // --- bestuur knoppen ---
-
             Row {
                 id: controlRow
                 
-                // Deze anchors gelden voor de Row zélf, dat mag wel!
                 anchors {
                     bottom: mediarectangle.bottom
                     horizontalCenter: parent.horizontalCenter
@@ -227,25 +217,25 @@ PopupWindow {
                 height: Style.barHoogte
                 spacing: Style.uiMarginsS
 
-                Button_element {
+                Button_element { //previous button
                     text: "⏮"
                     onClicked: MprisService.previous()
                 }
 
-                Button_element {
-                    // Hier gebruiken we een binding voor de play/pause tekst
+                Button_element { //play button
                     text: MprisService.activePlayer?.playbackState === MprisPlaybackState.Playing ? "⏸" : "▶"
                     onClicked: MprisService.playPause()
-                    baseColor: Style.accentKleur // Je kunt eventueel hier een andere kleur meegeven
+                    baseColor: Style.accentKleur
                 }
 
-                Button_element {
+                Button_element { //next button
                     text: "⏭"
                     onClicked: MprisService.next()
                 }
             }
         }
 
+        // --- volume barre ---
         Rectangle {
             id: volumebar
             anchors {

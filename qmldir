@@ -21,6 +21,8 @@ MediaWidget 1.0 Media_qml/MediaWidget.qml
 #~/.config/quickshell/Klok_qml/
 KlokWidget 1.0 Klok_qml/KlokWidget.qml
 
+#loos reuseble elements
+#   defalt path
 #~/.config/quickshell/Ui_elements_qml/
 Button_element 1.0 Ui_elements_qml/Button_element.qml
 MediaProgressBar 1.0 Ui_elements_qml/MediaProgressBar.qml

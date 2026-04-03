@@ -2,6 +2,8 @@ import QtQuick
 import Quickshell.Io
 import "../"
 
+// writen by claud sonnet 4.6
+
 Rectangle {
     id: root
 
@@ -13,7 +15,6 @@ Rectangle {
     radius: Style.radiusGrooteS
     color: Qt.darker(Style.borderKleur, 1.2)
 
-    // Lees volume bij opstarten en na wijziging
     Process {
         id: volumeCheck
         command: ["wpctl", "get-volume", "@DEFAULT_AUDIO_SINK@"]
@@ -21,14 +22,12 @@ Rectangle {
 
         stdout: SplitParser {
             onRead: data => {
-                // Output is bijv: "Volume: 0.75"
                 let match = data.match(/Volume:\s*([0-9.]+)/)
                 if (match) root.volume = Math.min(parseFloat(match[1]), 1.0)
             }
         }
     }
 
-    // Zet volume via wpctl
     Process {
         id: volumeSet
         property real targetVolume: 0

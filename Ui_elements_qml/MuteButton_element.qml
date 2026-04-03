@@ -2,6 +2,8 @@ import QtQuick
 import Quickshell.Io
 import "../"
 
+// writen by claud sonnet 4.6
+
 Rectangle {
     id: root
     implicitWidth: 40
@@ -11,7 +13,6 @@ Rectangle {
 
     property bool isMuted: false
 
-    // Lees mute status
     Process {
         id: statusCheck
         command: ["wpctl", "get-volume", "@DEFAULT_AUDIO_SINK@"]
@@ -24,7 +25,6 @@ Rectangle {
         }
     }
 
-    // Toggle mute
     Process {
         id: muteToggle
         command: ["wpctl", "set-mute", "@DEFAULT_AUDIO_SINK@", "toggle"]
@@ -32,7 +32,6 @@ Rectangle {
         onExited: statusCheck.running = true
     }
 
-    // Hercheck elke 2 seconden
     Timer {
         interval: 2000
         running: true

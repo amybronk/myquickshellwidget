@@ -3,6 +3,8 @@ import QtQuick
 import Quickshell
 import Quickshell.Services.Mpris
 
+// writen by claud sonnet 4.6
+
 Singleton {
     id: root
 
