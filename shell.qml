@@ -15,7 +15,13 @@ ShellRoot {
 
 	Loader {
 		id: klokwidget
-		active: false // Het object bestaat nu nog NIET in het RAM
+		active: false
 		source: "Klok_qml/KlokWidget.qml"
+	}
+
+	Loader {
+		id: applet
+		active: false
+		source: "AppPallet_qml/AppPallet.qml"
 	}
 }
