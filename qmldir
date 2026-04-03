@@ -29,3 +29,9 @@ MediaProgressBar 1.0 Ui_elements_qml/MediaProgressBar.qml
 ThumbnailArt 1.0 Ui_elements_qml/thumbnail_art_element.qml
 Volume_element 1.0 Ui_elements_qml/Volume_element.qml
 MuteButton 1.0 Ui_elements_qml/MuteButton_element.qml
+
+#app palet
+#   defalt path
+#~/.config/quickshell/AppPallet/
+singleton Favorites 1.0 AppPallet_qml/Favorites.qml
+AppPallet 1.0 AppPallet_qml/AppPallet.qml

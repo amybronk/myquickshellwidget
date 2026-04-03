@@ -18,6 +18,9 @@ PanelWindow {
 
 	property alias klokX: klok.x
 	property alias klokWidth: klok.width
+
+	property alias apppalletX: apppallet.x
+	property alias apppalletWidth: apppallet.width
 	
 	anchors {
 		top: true
@@ -55,7 +58,27 @@ PanelWindow {
 
 		MouseArea {
 			anchors.fill: parent
+			hoverEnabled: true
 			cursorShape: Qt.PointingHandCursor
+
+			onClicked: {
+				// Wissel tussen laden en ontladen
+				applet.active = true
+			}
+
+			onEntered: {
+				// Alleen aanroepen als de widget daadwerkelijk geladen is
+				if (applet.item) {
+					applet.item.stopSluiten()
+				}
+			}
+
+			onExited: {
+				// Alleen laten aftellen als de widget actief is EN bestaat
+				if (applet.active && applet.item) {
+					applet.item.startSluiten()
+				}
+			}
 		}
 	}
 
@@ -240,7 +263,7 @@ PanelWindow {
 
 			Text {
 				id: date_text
-				color: Style.textKleur
+				color: Style.textKleur1,333
 				anchors.horizontalCenter: parent.horizontalCenter
 				font.pixelSize: Style.fontGrootteL
 				text: Qt.formatDateTime(new Date(), "dddd, dd MMMM yyyy")
