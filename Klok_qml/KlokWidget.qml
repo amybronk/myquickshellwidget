@@ -9,7 +9,7 @@ import "../"
 
 PopupWindow {
     id: klokwindow
-    visible: false
+    visible: true
     color: "transparent"
 
 	implicitHeight: 300
@@ -25,43 +25,86 @@ PopupWindow {
         )
     }
 
+    // --- mouse detection ---
+    HoverHandler {
+        id: popupHover
+        onHoveredChanged: {
+            if (hovered) {
+                closeTimer.stop()
+            } else {
+                closeTimer.start()
+            }
+        }
+    }
+
+    Timer {
+        id: closeTimer
+        interval: Style.exitTimer
+        onTriggered: klokwidget.active = false
+    }
+    
+    function stopSluiten() { closeTimer.stop() }
+    function startSluiten() { closeTimer.start() }
+
+    // --- ui ---
 	Rectangle {
 		anchors.fill: parent
 		
 		color: Style.popupAchtergrondKleur
 		radius: Style.radiusGrooteM
-            Text {
-                anchors.centerIn: parent
-                text: "test"
-                color: Style.textKleur
-                font.pixelSize: Style.fontGrootteL
-            }
-	}
 
-	MouseArea {
-        anchors.fill: parent
-        hoverEnabled: true
-
-        onEntered: klokwidget.stopSluiten()
-        onExited: klokwidget.startSluiten()
-
-        Timer {
-            id: closeTimer
-            interval: Style.exitTimer
-            onTriggered: klokwidget.visible = false
+        border {
+            width: Style.borderSize
+            color: Style.borderKleur
         }
-    }
 
-    function stopSluiten() {
-        closeTimer.stop()
-    }
+        // --- klok ---
+        Rectangle {
+            id: digitalklok
+            anchors {
+                top: parent.top
+                left: parent.left
+                right: parent.right
 
-    function startSluiten() {
-        closeTimer.start()
-    }
-	
-	function toggle() {
-		visible = !visible
+                topMargin: Style.uiMarginsM
+            }
+
+            height: klok_column.height
+            color: "transparent"
+
+            Column {
+                id: klok_column
+                spacing: -2
+                anchors.centerIn: parent
+
+                Text {
+                    id: klok_text
+                    color: Style.textKleur
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    font.pixelSize: Style.fontGrootteL
+                    text: Qt.formatDateTime(new Date(), "HH:mm:ss")
+                }
+
+                Text {
+                    id: date_text
+                    color: Style.textKleur
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    font.pixelSize: Style.fontGrootteL
+                    text: Qt.formatDateTime(new Date(), "dddd, dd MMMM yyyy")
+                }
+
+                Timer {
+                    interval: 1000
+                    running: true
+                    repeat: true
+                    onTriggered: {
+                        var date = new Date()
+                        klok_text.text = Qt.formatDateTime(date, "HH:mm:ss")
+                        date_text.text = Qt.formatDateTime(date, "dddd, dd MMMM yyyy")
+                    }
+                }
+            }
+        }
+        // --- todo more UI ---
 	}
-	
 }

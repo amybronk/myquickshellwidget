@@ -106,14 +106,23 @@ PanelWindow {
 			anchors.fill: parent
 			hoverEnabled: true
 			cursorShape: Qt.PointingHandCursor
+
 			onClicked: {
-				musiccontrol.visible = !musiccontrol.visible
-				musiccontrol.stopSluiten()
+				// Wissel tussen laden en ontladen
+				musiccontrol.active = true
 			}
-			onEntered: musiccontrol.stopSluiten()
+
+			onEntered: {
+				// Alleen aanroepen als de widget daadwerkelijk geladen is
+				if (musiccontrol.item) {
+					musiccontrol.item.stopSluiten()
+				}
+			}
+
 			onExited: {
-				if (musiccontrol.visible) {
-					musiccontrol.startSluiten()
+				// Alleen laten aftellen als de widget actief is EN bestaat
+				if (musiccontrol.active && musiccontrol.item) {
+					musiccontrol.item.startSluiten()
 				}
 			}
 		}
@@ -200,18 +209,18 @@ PanelWindow {
 			hoverEnabled: true
 			cursorShape: Qt.PointingHandCursor
 			onClicked: {
-				klokwidget.visible = !klokwidget.visible
-				klokwidget.stopSluiten()
+				klokwidget.active = true
 			}
 
 			onEntered: {
-				 klokwidget.stopSluiten()
-				 klokwidget.visible = true
+				if (klokwidget.item) {
+					klokwidget.item.stopSluiten()
+				}
 			}
 			
 			onExited: {
-				if (klokwidget.visible) {
-					klokwidget.startSluiten()
+				if (klokwidget.active && klokwidget.item) {
+					klokwidget.item.startSluiten()
 				}
 			}
 		}
