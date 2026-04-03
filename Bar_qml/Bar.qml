@@ -56,7 +56,6 @@ PanelWindow {
 		MouseArea {
 			anchors.fill: parent
 			cursorShape: Qt.PointingHandCursor
-//			onClicked: app pallet
 		}
 	}
 
@@ -78,24 +77,21 @@ PanelWindow {
 		radius: Style.radiusGrooteM
 		color: Style.achtergrondKleur
 
-		// --- DE MAGIE VOOR AFGERONDE CLIPPING ---
 		layer.enabled: true
 		layer.effect: OpacityMask {
 			maskSource: Rectangle {
 				width: musicButton.width
 				height: musicButton.height
-				radius: musicButton.radius // Dit dwingt de clipping in deze vorm
+				radius: musicButton.radius
 			}
 		}
 
-		// Je ThumbnailArt vult nu de knop en wordt netjes afgerond
+
 		ThumbnailArt {
 			anchors.fill: parent
 			artUrl: MprisService.activePlayer?.metadata["mpris:artUrl"] ?? ""
 		}
 
-		// BELANGRIJK: De border moet op een aparte laag BOVENOP de clipping liggen
-		// anders wordt de border zelf ook half weggeclipt of wazig.
 		Rectangle {
 			anchors.fill: parent
 			color: "transparent"
@@ -152,7 +148,6 @@ PanelWindow {
 			Repeater {
 				model: 9
 				delegate: Text {
-					// Logica voor workspace status
 					property var ws: Hyprland.workspaces.values.find(w => w.id === index + 1)
 					property bool isActive: Hyprland.focusedWorkspace?.id === (index + 1)
 					font.pixelSize: Style.iconGrooteM
@@ -161,7 +156,7 @@ PanelWindow {
 						if (ws) return "⬤"
 						return "⭘"
 					}
-					// Kleur logica: actief vs bestaand vs leeg
+
 					color: {
 						if (isActive) return Style.actiefWerkbaldKleur
 						if (ws) return Style.volleWerkbaldKleur
@@ -206,17 +201,14 @@ PanelWindow {
 			cursorShape: Qt.PointingHandCursor
 			onClicked: {
 				klokwidget.visible = !klokwidget.visible
-				klokwidget.stopSluiten() // Zorg dat hij niet direct sluit bij klik
+				klokwidget.stopSluiten()
 			}
 
-			// DIT IS DE KEY:
-			// Als we de knop binnengaan, mag de widget niet sluiten
 			onEntered: {
 				 klokwidget.stopSluiten()
 				 klokwidget.visible = true
 			}
 			
-			// Als we de knop verlaten, moet de widget gaan aftellen
 			onExited: {
 				if (klokwidget.visible) {
 					klokwidget.startSluiten()
@@ -251,7 +243,6 @@ PanelWindow {
 				repeat: true
 				onTriggered: {
 					var date = new Date()
-					// Update both separate labels using their specific IDs
 					klok_text.text = Qt.formatDateTime(date, "HH:mm:ss")
 					date_text.text = Qt.formatDateTime(date, "dddd, dd MMMM yyyy")
 				}

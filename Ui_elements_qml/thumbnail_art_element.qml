@@ -1,10 +1,12 @@
 import QtQuick
-import "../" // Voor toegang tot Style
+import "../"
+
+// writen by claud sonnet 4.6
 
 Item {
     id: root
     property url artUrl: ""
-    property real size: 40 // Standaard grootte
+    property real size: 40
 
     width: size
     height: size
@@ -12,7 +14,7 @@ Item {
     Rectangle {
         anchors.fill: parent
         radius: Style.radiusGrooteM
-        color: "#22ffffff" // Donkere achtergrond als er geen plaatje is
+        color: "#22ffffff"
         clip: true
         
         border {
@@ -20,19 +22,17 @@ Item {
             width: Style.borderSize
         }
 
-        // De daadwerkelijke Album Art
         Image {
             id: albumImage
             anchors.fill: parent
             source: root.artUrl != "" ? root.artUrl : ""
             fillMode: Image.PreserveAspectCrop
-            asynchronous: true // Voorkomt dat je UI bevriest bij grote plaatjes
+            asynchronous: true
             opacity: status === Image.Ready ? 1 : 0
 
             Behavior on opacity { NumberAnimation { duration: 300 } }
         }
 
-        // Fallback icoon (muzieknoot) als er geen plaatje is
         Text {
             anchors.centerIn: parent
             text: "♪"
