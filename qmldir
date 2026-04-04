@@ -29,6 +29,7 @@ MediaProgressBar 1.0 Ui_elements_qml/MediaProgressBar.qml
 ThumbnailArt 1.0 Ui_elements_qml/thumbnail_art_element.qml
 Volume_element 1.0 Ui_elements_qml/Volume_element.qml
 MuteButton 1.0 Ui_elements_qml/MuteButton_element.qml
+TailscaleButton 1.0 Ui_elements_qml/TailscaleButton.qml
 
 #app palet
 #   defalt path

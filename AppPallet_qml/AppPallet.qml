@@ -14,7 +14,7 @@ PopupWindow {
 
     property var recentIds: []
 
-    implicitHeight: 445
+    implicitHeight: 663
     implicitWidth: 575
 
     anchor {
@@ -25,10 +25,6 @@ PopupWindow {
             implicitWidth,
             implicitHeight
         )
-    }
-
-    Component.onCompleted: {
-        searchInput.forceActiveFocus()
     }
 
     HoverHandler {
@@ -50,23 +46,6 @@ PopupWindow {
 
     function stopSluiten() { closeTimer.stop() }
     function startSluiten() { closeTimer.start() }
-
-    // --- Recente apps bijhouden ---
-
-    Connections {
-        target: ToplevelManager
-
-        function onToplevelCreated(toplevel) {
-            var appId = toplevel.appId
-            if (!appId || appId === "") return
-
-            var list = appletWindow.recentIds.filter(id => id !== appId)
-            list.unshift(appId)
-            appletWindow.recentIds = list.slice(0, 16)
-        }
-    }
-
-    
 
     // --- UI ---
     Rectangle {
@@ -115,17 +94,18 @@ PopupWindow {
         }
     }
 
-    // --- Bovenste vak: Open apps ---
+    // --- top app box ---
     Rectangle {
         id: openApps
         anchors {
             top: searchContainer.bottom
-            topMargin: Style.uiMarginsM
             left: parent.left
             right: parent.right
-        }
 
-        height: ((appletWindow.height - (searchContainer.height + Style.uiMarginsM)) - Style.uiMarginsM) / 2
+            topMargin: Style.uiMarginsM
+        }
+            
+        height: 197.5
         color: Style.popupAchtergrondKleur
         radius: Style.radiusGrooteM
 
@@ -134,69 +114,22 @@ PopupWindow {
             width: Style.borderSize
         }
 
-        GridView {
-            anchors.fill: parent
-            anchors.margins: Style.uiMarginsS
-            cellWidth: 70
-            cellHeight: 90
-            clip: true
-
-            model: ToplevelManager.toplevels.values
-
-            delegate: Item {
-                width: 70
-                height: 90
-
-                required property var modelData
-
-                Rectangle {
-                    anchors.centerIn: parent
-                    width: 50
-                    height: 50
-                    radius: Style.radiusGrooteS
-                    color: Style.accentKleur
-
-                    Image {
-                        anchors.fill: parent
-                        anchors.margins: 6
-                        source: {
-                            var entry = DesktopEntries.byId(modelData.appId)
-                            return entry ? "image://icon/" + entry.icon : ""
-                        }
-                    }
-                }
-
-                Text {
-                    anchors.bottom: parent.bottom
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: modelData.title
-                    color: "white"
-                    font.pixelSize: 11
-                    elide: Text.ElideRight
-                    width: parent.width
-                    horizontalAlignment: Text.AlignHCenter
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: modelData.activate()
-                }
-            }
-        }
+        
     }
 
-    // --- Onderste vak: Recente apps ---
+    // --- center app box ---
     Rectangle {
-        id: appOpener
+        id: recentApps
 
         anchors {
             top: openApps.bottom
             left: parent.left
             right: parent.right
-            bottom: parent.bottom
+
             topMargin: Style.uiMarginsM
         }
 
+        height: 197.5
         color: Style.popupAchtergrondKleur
         radius: Style.radiusGrooteM
 
@@ -205,64 +138,67 @@ PopupWindow {
             width: Style.borderSize
         }
 
+        
+    }
+
+    // --- bottom app box ---
+    Rectangle {
+        id: favoritApps
+
+        anchors {
+            top: recentApps.bottom
+            left: parent.left
+            right: parent.right
+
+            topMargin: Style.uiMarginsM
+        }
+
+        height: 197.5
+        color: Style.popupAchtergrondKleur
+        radius: Style.radiusGrooteM
+
+        border {
+            color: Style.borderKleur
+            width: Style.borderSize
+        }
+        
         GridView {
             anchors.fill: parent
-            anchors.margins: Style.uiMarginsS
-            cellWidth: 70
-            cellHeight: 90
+            cellWidth: appletWindow.width / 8
+            cellHeight: parent.height / Style.appletDrawrAmount
             clip: true
 
-            model: {
-                var ids = appletWindow.recentIds.length > 0
-                    ? appletWindow.recentIds
-                    : ["firefox", "code", "kitty", "discord",
-                    "spotify", "obsidian", "gimp", "vlc",
-                    "steam", "thunderbird", "org.gnome.Nautilus",
-                    "libreoffice-writer", "blender", "inkscape",
-                    "pavucontrol", "org.kde.dolphin"]
-
-                return ids
-                    .map(id => DesktopEntries.byId(id))
-                    .filter(e => e !== null)
-            }
-
+            model: 8 * Style.appletDrawrAmount
 
             delegate: Item {
-                width: 70
-                height: 90
-
-                required property var modelData
-
+                width: GridView.view.cellWidth
+                height: GridView.view.cellHeight
+                
                 Rectangle {
+                    id: icon
                     anchors.centerIn: parent
                     width: 50
                     height: 50
                     radius: Style.radiusGrooteS
                     color: Style.accentKleur
-
-                    Image {
-                        anchors.fill: parent
-                        anchors.margins: 6
-                        source: "image://icon/" + modelData.icon
-                    }
+                    
+                    Text { anchors.centerIn: parent; text: "App" }
                 }
-
+                
                 Text {
-                    anchors.bottom: parent.bottom
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: modelData.name
-                    color: "white"
-                    font.pixelSize: 11
-                    elide: Text.ElideRight
-                    width: parent.width
-                    horizontalAlignment: Text.AlignHCenter
-                }
+                    anchors {
+                        top: icon.bottom
+                        horizontalCenter: parent.horizontalCenter
+                        topMargin: Style.uiMarginsM
+                    }
 
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: modelData.execute()
+                    height: 12
+                    text: "App" + index
+                    color: Style.textKleur
+                    font.pixelSize: Style.fontGrootteM
                 }
             }
         }
+        
     }
 }

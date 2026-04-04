@@ -62,19 +62,16 @@ PanelWindow {
 			cursorShape: Qt.PointingHandCursor
 
 			onClicked: {
-				// Wissel tussen laden en ontladen
 				applet.active = true
 			}
 
 			onEntered: {
-				// Alleen aanroepen als de widget daadwerkelijk geladen is
 				if (applet.item) {
 					applet.item.stopSluiten()
 				}
 			}
 
 			onExited: {
-				// Alleen laten aftellen als de widget actief is EN bestaat
 				if (applet.active && applet.item) {
 					applet.item.startSluiten()
 				}
@@ -131,19 +128,16 @@ PanelWindow {
 			cursorShape: Qt.PointingHandCursor
 
 			onClicked: {
-				// Wissel tussen laden en ontladen
 				musiccontrol.active = true
 			}
 
 			onEntered: {
-				// Alleen aanroepen als de widget daadwerkelijk geladen is
 				if (musiccontrol.item) {
 					musiccontrol.item.stopSluiten()
 				}
 			}
 
 			onExited: {
-				// Alleen laten aftellen als de widget actief is EN bestaat
 				if (musiccontrol.active && musiccontrol.item) {
 					musiccontrol.item.startSluiten()
 				}
@@ -202,6 +196,19 @@ PanelWindow {
 					}
 				}
 			}
+		}
+	}
+
+	TailscaleButton {
+		id: tailscaleButton
+
+		anchors {
+			top: parent.top
+			right: klok.left
+			bottom: parent.bottom
+			topMargin: 1
+			rightMargin: 5
+			bottomMargin: 1
 		}
 	}
 	
