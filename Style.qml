@@ -45,4 +45,8 @@ Item {
 
     readonly property int sliderThickness: 8
 
+    readonly property int appletAppAmount: 2
+    readonly property int appletDrawrAmount: 2
+    
+
 }
