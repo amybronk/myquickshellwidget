@@ -113,8 +113,44 @@ PopupWindow {
             color: Style.borderKleur
             width: Style.borderSize
         }
-
         
+        GridView {
+            anchors.fill: parent
+            cellWidth: appletWindow.width / 8
+            cellHeight: parent.height / Style.appletDrawrAmount
+            clip: true
+
+            model: 8 * Style.appletDrawrAmount
+
+            delegate: Item {
+                width: GridView.view.cellWidth
+                height: GridView.view.cellHeight
+                
+                Rectangle {
+                    id: icon
+                    anchors.centerIn: parent
+                    width: 50
+                    height: 50
+                    radius: Style.radiusGrooteS
+                    color: Style.accentKleur
+                    
+                    Text { anchors.centerIn: parent; text: "App" }
+                }
+                
+                Text {
+                    anchors {
+                        top: icon.bottom
+                        horizontalCenter: parent.horizontalCenter
+                        topMargin: Style.uiMarginsM
+                    }
+
+                    height: 12
+                    text: "App" + index
+                    color: Style.textKleur
+                    font.pixelSize: Style.fontGrootteM
+                }
+            }
+        }
     }
 
     // --- center app box ---
@@ -138,7 +174,43 @@ PopupWindow {
             width: Style.borderSize
         }
 
-        
+        GridView {
+            anchors.fill: parent
+            cellWidth: appletWindow.width / 8
+            cellHeight: parent.height / Style.appletDrawrAmount
+            clip: true
+
+            model: 8 * Style.appletDrawrAmount
+
+            delegate: Item {
+                width: GridView.view.cellWidth
+                height: GridView.view.cellHeight
+                
+                Rectangle {
+                    id: icon
+                    anchors.centerIn: parent
+                    width: 50
+                    height: 50
+                    radius: Style.radiusGrooteS
+                    color: Style.accentKleur
+                    
+                    Text { anchors.centerIn: parent; text: "App" }
+                }
+                
+                Text {
+                    anchors {
+                        top: icon.bottom
+                        horizontalCenter: parent.horizontalCenter
+                        topMargin: Style.uiMarginsM
+                    }
+
+                    height: 12
+                    text: "App" + index
+                    color: Style.textKleur
+                    font.pixelSize: Style.fontGrootteM
+                }
+            }
+        }  
     }
 
     // --- bottom app box ---
@@ -199,6 +271,5 @@ PopupWindow {
                 }
             }
         }
-        
     }
 }

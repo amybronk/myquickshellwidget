@@ -30,6 +30,7 @@ Item {
     readonly property int fontGrootteS: 8
     readonly property int fontGrootteM: 10
     readonly property int fontGrootteL: 14
+    readonly property int fontGrootteG: 22
 
     //readonly property int iconGrooteS: 12
     readonly property int iconGrooteM: 18

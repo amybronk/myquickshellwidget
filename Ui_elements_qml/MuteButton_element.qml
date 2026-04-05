@@ -42,7 +42,7 @@ Rectangle {
     Text {
         anchors.centerIn: parent
         text: root.isMuted ? "󰝟" : "󰕾"
-        font.pixelSize: 22
+        font.pixelSize: Style.fontGrootteG
         color: root.isMuted ? "#ff5555" : Style.textKleur
     }
 
