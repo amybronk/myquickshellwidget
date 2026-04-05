@@ -199,6 +199,19 @@ PanelWindow {
 		}
 	}
 
+	CameraIndicator {
+		id: cameraindication
+
+		anchors {
+			top: parent.top
+			right: tailscaleButton.left
+			bottom: parent.bottom
+			topMargin: 1
+			rightMargin: Style.uiMarginsS
+			bottomMargin: 1
+		}
+	}
+
 	TailscaleButton {
 		id: tailscaleButton
 
@@ -207,7 +220,7 @@ PanelWindow {
 			right: klok.left
 			bottom: parent.bottom
 			topMargin: 1
-			rightMargin: 5
+			rightMargin: Style.uiMarginsM
 			bottomMargin: 1
 		}
 	}
@@ -220,8 +233,7 @@ PanelWindow {
 			bottom: parent.bottom
 
 			topMargin: 1
-			leftMargin: 5
-			rightMargin: 5
+			rightMargin: Style.uiMarginsM
 			bottomMargin: 1
 		}
 

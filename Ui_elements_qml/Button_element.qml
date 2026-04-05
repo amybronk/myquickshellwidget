@@ -28,7 +28,7 @@ Rectangle {
     Text {
         id: label
         anchors.centerIn: parent
-        font.pixelSize: Style.fontGrootteM
+        font.pixelSize: Style.fontGrootteG
         color: Style.textKleur
     }
 }
