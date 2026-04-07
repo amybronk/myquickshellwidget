@@ -31,6 +31,9 @@ Volume_element 1.0 Ui_elements_qml/Volume_element.qml
 MuteButton 1.0 Ui_elements_qml/MuteButton_element.qml
 TailscaleButton 1.0 Ui_elements_qml/TailscaleButton.qml
 CameraIndicator 1.0 Ui_elements_qml/CameraIndicator.qml
+MicIndecator 1.0 Ui_elements_qml/MicIndecator.qml
+AppButton 1.0 Ui_elements_qml/AppButton.qml
+
 
 #app palet
 #   defalt path

@@ -2,23 +2,24 @@ pragma Singleton
 import QtQuick
 
 QtObject {
-    // Vul hier je favoriete app-IDs in (uit /usr/share/applications/*.desktop)
+    // grep "^Icon=" /usr/share/applications/blender.desktop | cut -d'=' -f2
+    // "grep "^Icon=" /usr/share/applications/", fillenaam, " | cut -d'=' -f2"
     readonly property var apps: [
-        "firefox",
+        "vivaldi-stable",                                           // default
+        { desktop: "vivaldi-stable", action: "new-private-window" }, // private window
+        "spotify",
+        "discord",
+        "org.freecad.FreeCAD",
+        "org.kde.dolphin",
+        "blender",
+        "RapidRAW",
+        "vscodium-wayland",
         "org.gnome.Nautilus",
         "code",
-        "discord",
-        "spotify",
-        "kitty",
         "obsidian",
         "gimp",
         "vlc",
-        "steam",
-        "thunderbird",
-        "libreoffice-writer",
-        "org.kde.dolphin",
-        "blender",
-        "inkscape",
-        "pavucontrol"
+        { desktop: "steam", action: "Library" },                   // opens steam Library insted of default steam
+        "thunderbird"
     ]
 }

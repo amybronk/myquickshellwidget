@@ -128,7 +128,11 @@ PopupWindow {
                 
                 Rectangle {
                     id: icon
-                    anchors.centerIn: parent
+                    anchors {
+                        top: parent.top
+                        horizontalCenter: parent.horizontalCenter
+                        topMargin: Style.uiMarginsG
+                    }
                     width: 50
                     height: 50
                     radius: Style.radiusGrooteS
@@ -145,7 +149,7 @@ PopupWindow {
                     }
 
                     height: 12
-                    text: "App" + index
+                    text: "App " + index
                     color: Style.textKleur
                     font.pixelSize: Style.fontGrootteM
                 }
@@ -188,7 +192,11 @@ PopupWindow {
                 
                 Rectangle {
                     id: icon
-                    anchors.centerIn: parent
+                    anchors {
+                        top: parent.top
+                        horizontalCenter: parent.horizontalCenter
+                        topMargin: Style.uiMarginsG
+                    }
                     width: 50
                     height: 50
                     radius: Style.radiusGrooteS
@@ -205,7 +213,7 @@ PopupWindow {
                     }
 
                     height: 12
-                    text: "App" + index
+                    text: "App " + index
                     color: Style.textKleur
                     font.pixelSize: Style.fontGrootteM
                 }
@@ -221,7 +229,6 @@ PopupWindow {
             top: recentApps.bottom
             left: parent.left
             right: parent.right
-
             topMargin: Style.uiMarginsM
         }
 
@@ -233,42 +240,19 @@ PopupWindow {
             color: Style.borderKleur
             width: Style.borderSize
         }
-        
+
         GridView {
             anchors.fill: parent
             cellWidth: appletWindow.width / 8
             cellHeight: parent.height / Style.appletDrawrAmount
             clip: true
 
-            model: 8 * Style.appletDrawrAmount
+            model: Favorites.apps
 
-            delegate: Item {
+            delegate: AppButton {
                 width: GridView.view.cellWidth
                 height: GridView.view.cellHeight
-                
-                Rectangle {
-                    id: icon
-                    anchors.centerIn: parent
-                    width: 50
-                    height: 50
-                    radius: Style.radiusGrooteS
-                    color: Style.accentKleur
-                    
-                    Text { anchors.centerIn: parent; text: "App" }
-                }
-                
-                Text {
-                    anchors {
-                        top: icon.bottom
-                        horizontalCenter: parent.horizontalCenter
-                        topMargin: Style.uiMarginsM
-                    }
-
-                    height: 12
-                    text: "App" + index
-                    color: Style.textKleur
-                    font.pixelSize: Style.fontGrootteM
-                }
+                appData: modelData
             }
         }
     }
