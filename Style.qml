@@ -26,6 +26,7 @@ Item {
     readonly property int uiMarginsS: 2
     readonly property int uiMarginsM: 5
     readonly property int uiMarginsL: 10
+    readonly property int uiMarginsG: 15
 
     readonly property int fontGrootteS: 8
     readonly property int fontGrootteM: 10
@@ -48,6 +49,4 @@ Item {
 
     readonly property int appletAppAmount: 2
     readonly property int appletDrawrAmount: 2
-    
-
 }
