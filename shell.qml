@@ -2,6 +2,8 @@ import Quickshell
 import QtQuick
 import "."
 
+//Shell.qml
+
 ShellRoot {
     id: shellRoot
 

@@ -8,7 +8,7 @@ import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import "../"
 
-
+//Bar.qml
 
 PanelWindow {
 	id: root

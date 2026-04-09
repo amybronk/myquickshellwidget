@@ -1,10 +1,14 @@
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
+import Quickshell.Hyprland
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import QtCore
 import "../"
+
+//AppPallet.qml
 
 
 PopupWindow {
@@ -101,82 +105,45 @@ PopupWindow {
             top: searchContainer.bottom
             left: parent.left
             right: parent.right
-
             topMargin: Style.uiMarginsM
         }
-            
+
         height: 197.5
         color: Style.popupAchtergrondKleur
         radius: Style.radiusGrooteM
+        border { color: Style.borderKleur; width: Style.borderSize }
 
-        border {
-            color: Style.borderKleur
-            width: Style.borderSize
-        }
-        
         GridView {
             anchors.fill: parent
             cellWidth: appletWindow.width / 8
             cellHeight: parent.height / Style.appletDrawrAmount
             clip: true
 
-            model: 8 * Style.appletDrawrAmount
+            model: Hyprland.clients
 
-            delegate: Item {
+            delegate: OpenAppButton {
+                required property var modelData
                 width: GridView.view.cellWidth
                 height: GridView.view.cellHeight
-                
-                Rectangle {
-                    id: icon
-                    anchors {
-                        top: parent.top
-                        horizontalCenter: parent.horizontalCenter
-                        topMargin: Style.uiMarginsG
-                    }
-                    width: 50
-                    height: 50
-                    radius: Style.radiusGrooteS
-                    color: Style.accentKleur
-                    
-                    Text { anchors.centerIn: parent; text: "App" }
-                }
-                
-                Text {
-                    anchors {
-                        top: icon.bottom
-                        horizontalCenter: parent.horizontalCenter
-                        topMargin: Style.uiMarginsM
-                    }
-
-                    height: 12
-                    text: "App " + index
-                    color: Style.textKleur
-                    font.pixelSize: Style.fontGrootteM
-                }
+                client: modelData
             }
         }
     }
 
-    // --- center app box ---
+    // --- center app box --- recente apps
     Rectangle {
         id: recentApps
-
         anchors {
             top: openApps.bottom
             left: parent.left
             right: parent.right
-
             topMargin: Style.uiMarginsM
         }
 
         height: 197.5
         color: Style.popupAchtergrondKleur
         radius: Style.radiusGrooteM
-
-        border {
-            color: Style.borderKleur
-            width: Style.borderSize
-        }
+        border { color: Style.borderKleur; width: Style.borderSize }
 
         GridView {
             anchors.fill: parent
@@ -184,47 +151,19 @@ PopupWindow {
             cellHeight: parent.height / Style.appletDrawrAmount
             clip: true
 
-            model: 8 * Style.appletDrawrAmount
+            model: RecentApps.recentList   // ← was Hyprland.clients
 
-            delegate: Item {
+            delegate: AppButton {          // ← was OpenAppButton
                 width: GridView.view.cellWidth
                 height: GridView.view.cellHeight
-                
-                Rectangle {
-                    id: icon
-                    anchors {
-                        top: parent.top
-                        horizontalCenter: parent.horizontalCenter
-                        topMargin: Style.uiMarginsG
-                    }
-                    width: 50
-                    height: 50
-                    radius: Style.radiusGrooteS
-                    color: Style.accentKleur
-                    
-                    Text { anchors.centerIn: parent; text: "App" }
-                }
-                
-                Text {
-                    anchors {
-                        top: icon.bottom
-                        horizontalCenter: parent.horizontalCenter
-                        topMargin: Style.uiMarginsM
-                    }
-
-                    height: 12
-                    text: "App " + index
-                    color: Style.textKleur
-                    font.pixelSize: Style.fontGrootteM
-                }
+                appData: modelData
             }
-        }  
+        }
     }
 
-    // --- bottom app box ---
+    // --- bottom app box --- favorieten (ongewijzigd)
     Rectangle {
         id: favoritApps
-
         anchors {
             top: recentApps.bottom
             left: parent.left
@@ -235,11 +174,7 @@ PopupWindow {
         height: 197.5
         color: Style.popupAchtergrondKleur
         radius: Style.radiusGrooteM
-
-        border {
-            color: Style.borderKleur
-            width: Style.borderSize
-        }
+        border { color: Style.borderKleur; width: Style.borderSize }
 
         GridView {
             anchors.fill: parent

@@ -3,6 +3,8 @@ import Quickshell.Io
 import QtQuick
 import "../"
 
+//AppButton.qml
+
 Item {
     id: appLauncherButton
 
@@ -12,36 +14,60 @@ Item {
 
     property string iconName: ""
     property string applicationName: ""
+    property string desktopPath: ""
 
+    // stap 1: vind het volledige pad
+    Process {
+        id: findProcess
+        running: true
+        command: ["bash", "-c",
+            "for dir in /usr/share/applications " +
+            "/var/lib/flatpak/exports/share/applications " +
+            "$HOME/.local/share/flatpak/exports/share/applications " +
+            "$HOME/.local/share/applications; do " +
+            "[ -f \"$dir/" + desktopName + "\" ] && echo \"$dir/" + desktopName + "\" && break; done"
+        ]
+        stdout: SplitParser {
+            onRead: data => {
+                appLauncherButton.desktopPath = data.trim()
+                iconProcess.running = true   // stap 2 starten
+                nameProcess.running = true
+            }
+        }
+    }
+
+    // stap 2: laad icoon
     Process {
         id: iconProcess
+        running: false  // wacht op findProcess
         command: ["bash", "-c",
-            "sed '/^\\[Desktop Action/,$ d' /usr/share/applications/" + desktopName +
+            "sed '/^\\[Desktop Action/,$ d' '" + desktopPath + "'" +
             " | grep '^Icon=' | cut -d'=' -f2 | head -1"
         ]
-        running: true
         stdout: SplitParser {
             onRead: data => { appLauncherButton.iconName = data.trim() }
         }
     }
 
+    // stap 2: laad naam (uit actie sectie als action opgegeven)
     Process {
         id: nameProcess
+        running: false  // wacht op findProcess
         command: ["bash", "-c", action !== ""
-            ? "sed -n '/^\\[Desktop Action " + action + "\\]/,/^\\[/p' /usr/share/applications/" + desktopName + " | grep '^Name=' | head -1 | cut -d'=' -f2"
-            : "sed '/^\\[Desktop Action/,$ d' /usr/share/applications/" + desktopName + " | grep '^Name=' | head -1 | cut -d'=' -f2"
+            ? "sed -n '/^\\[Desktop Action " + action + "\\]/,/^\\[/p' '" + desktopPath + "' | grep '^Name=' | head -1 | cut -d'=' -f2"
+            : "sed '/^\\[Desktop Action/,$ d' '" + desktopPath + "' | grep '^Name=' | head -1 | cut -d'=' -f2"
         ]
-        running: true
         stdout: SplitParser {
             onRead: data => { appLauncherButton.applicationName = data.trim() }
         }
     }
 
+    // start app (uit actie sectie als action opgegeven)
     Process {
         id: launchProcess
         command: ["bash", "-c", action !== ""
-            ? "sed -n '/^\\[Desktop Action " + action + "\\]/,/^\\[/p' /usr/share/applications/" + desktopName + " | grep '^Exec=' | head -1 | sed 's/^Exec=//' | sed 's/ %.*//' | bash"
-            : "sed '/^\\[Desktop Action/,$ d' /usr/share/applications/" + desktopName + " | grep '^Exec=' | head -1 | sed 's/^Exec=//' | sed 's/ %.*//' | bash"
+            ? "sed -n '/^\\[Desktop Action " + action + "\\]/,/^\\[/p' '" + desktopPath + "' | grep '^Exec=' | head -1 | sed 's/^Exec=//' | sed 's/ %.*//' | bash"
+            : "sed '/^\\[Desktop Action/,$ d' '" + desktopPath + "' | grep '^Exec=' | head -1 | sed 's/^Exec=//' | sed 's/ %.*//' | bash"
         ]
     }
 
@@ -115,6 +141,9 @@ Item {
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
-        onClicked: launchProcess.running = true
+        onClicked: {
+            RecentApps.recordApp(appData)
+            launchProcess.running = true
+        }
     }
 }
