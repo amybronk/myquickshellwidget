@@ -3,7 +3,6 @@ import Quickshell.Io
 import QtQuick
 import "../"
 
-// Geen visueel element — gooi dit in elke UI en roep save() aan
 Item {
     id: root
 

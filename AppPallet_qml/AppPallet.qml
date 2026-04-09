@@ -5,7 +5,7 @@ import Quickshell.Hyprland
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import QtCore
+
 import "../"
 
 //AppPallet.qml
@@ -98,7 +98,7 @@ PopupWindow {
         }
     }
 
-    // --- top app box ---
+    // --- top app box --- open apps
     Rectangle {
         id: openApps
         anchors {
@@ -151,9 +151,9 @@ PopupWindow {
             cellHeight: parent.height / Style.appletDrawrAmount
             clip: true
 
-            model: RecentApps.recentList   // ← was Hyprland.clients
+            model: RecentApps.recentList
 
-            delegate: AppButton {          // ← was OpenAppButton
+            delegate: AppButton {
                 width: GridView.view.cellWidth
                 height: GridView.view.cellHeight
                 appData: modelData
@@ -161,7 +161,7 @@ PopupWindow {
         }
     }
 
-    // --- bottom app box --- favorieten (ongewijzigd)
+    // --- bottom app box --- favorieten
     Rectangle {
         id: favoritApps
         anchors {

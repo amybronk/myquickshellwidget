@@ -49,7 +49,7 @@ Item {
         }
     }
 
-    // stap 2: laad naam (uit actie sectie als action opgegeven)
+    // stap 3: laad naam (uit actie sectie als action opgegeven)
     Process {
         id: nameProcess
         running: false  // wacht op findProcess

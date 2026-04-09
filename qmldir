@@ -33,7 +33,7 @@ TailscaleButton 1.0 Ui_elements_qml/TailscaleButton.qml
 CameraIndicator 1.0 Ui_elements_qml/CameraIndicator.qml
 MicIndecator 1.0 Ui_elements_qml/MicIndecator.qml
 AppButton 1.0 Ui_elements_qml/AppButton.qml
-LaunchLastSessionButton 1.0 Ui_elements_qml/LaunchLastSessionButton.qml.qml
+LaunchLastSessionButton 1.0 Ui_elements_qml/LaunchLastSessionButton.qml
 OpenAppButton 1.0 Ui_elements_qml/OpenAppButton.qml
 
 #app palet
