@@ -11,7 +11,9 @@ Item {
     readonly property color popupAchtergrondKleur: '#eb2b2b2b'
     readonly property color borderKleur: '#daaa00a4'
     readonly property color accentKleur: '#520050'
+
     readonly property color textKleur: '#ffffffff'
+    readonly property color textKleur2:'#aa00a4'
     readonly property color negatiefTextKleur: '#ff000000'
 
     readonly property color actiefWerkbaldKleur: '#ff0000'

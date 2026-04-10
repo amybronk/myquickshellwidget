@@ -26,4 +26,16 @@ ShellRoot {
 		active: false
 		source: "AppPallet_qml/AppPallet.qml"
 	}
+
+	Loader {
+		id: powerwindow
+		active: false
+		source: "powerwidgit_qml/PowerWidgit.qml"
+	}
+
+	Loader {
+        id: shutdownConfirmWindow
+        active: false
+        source: "powerwidgit_qml/PowerOffConformation.qml"
+    }
 }
