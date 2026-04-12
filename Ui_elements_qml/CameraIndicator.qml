@@ -12,7 +12,6 @@ Rectangle {
     radius: Style.radiusGrooteM
     color: Style.achtergrondKleur
 
-    // Gebruik alleen opacity, niet visible + opacity tegelijk
     width: cameraActive ? root.height : 0
     visible: opacity > 0
     opacity: cameraActive ? 1 : 0

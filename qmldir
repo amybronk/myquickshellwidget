@@ -33,10 +33,21 @@ TailscaleButton 1.0 Ui_elements_qml/TailscaleButton.qml
 CameraIndicator 1.0 Ui_elements_qml/CameraIndicator.qml
 MicIndecator 1.0 Ui_elements_qml/MicIndecator.qml
 AppButton 1.0 Ui_elements_qml/AppButton.qml
-
+LaunchLastSessionButton 1.0 Ui_elements_qml/LaunchLastSessionButton.qml
+OpenAppButton 1.0 Ui_elements_qml/OpenAppButton.qml
+DirOpener 1.0 Ui_elements_qml/DirOpener.qml
 
 #app palet
 #   defalt path
 #~/.config/quickshell/AppPallet/
 singleton Favorites 1.0 AppPallet_qml/Favorites.qml
+singleton RecentApps 1.0 AppPallet_qml/RecentApps.qml
+singleton OpenApps 1.0 AppPallet_qml/OpenApps.qml
 AppPallet 1.0 AppPallet_qml/AppPallet.qml
+SaveLastSession 1.0 AppPallet_qml/SaveLastSession.qml
+
+#power maneger
+#   defalt path
+#~/.config/quickshell/powerwidgit_qml/
+PowerWidgit 1.0 powerwidgit_qml/PowerWidgit.qml
+PowerOffConformation 1.0 powerwidgit_qml/PowerOffConformation.qml

@@ -8,7 +8,7 @@ import QtQuick.Layouts
 import Qt5Compat.GraphicalEffects
 import "../"
 
-
+//Bar.qml
 
 PanelWindow {
 	id: root
@@ -21,6 +21,9 @@ PanelWindow {
 
 	property alias apppalletX: apppallet.x
 	property alias apppalletWidth: apppallet.width
+
+	property alias powermanegerX: powermanegerwindow.x
+	property alias powermanegerWidth: powermanegerwindow.width
 	
 	anchors {
 		top: true
@@ -140,6 +143,53 @@ PanelWindow {
 			onExited: {
 				if (musiccontrol.active && musiccontrol.item) {
 					musiccontrol.item.startSluiten()
+				}
+			}
+		}
+	}
+
+	Rectangle {
+		id: powermanegerwindow
+
+		anchors {
+			top: parent.top
+			left: musicButton.right
+			bottom: parent.bottom
+
+			topMargin: 1
+			leftMargin: 5
+			rightMargin: 5
+			bottomMargin: 1
+		}
+
+		visible: true
+		radius: Style.radiusGrooteM
+		width: root.height
+		color: Style.achtergrondKleur
+
+		border {
+			color: Style.borderKleur
+			width: Style.borderSize
+		}
+
+		MouseArea {
+			anchors.fill: parent
+			hoverEnabled: true
+			cursorShape: Qt.PointingHandCursor
+
+			onClicked: {
+				powerwindow.active = true
+			}
+
+			onEntered: {
+				if (powerwindow.item) {
+					powerwindow.item.stopSluiten()
+				}
+			}
+
+			onExited: {
+				if (powerwindow.active && powerwindow.item) {
+					powerwindow.item.startSluiten()
 				}
 			}
 		}
