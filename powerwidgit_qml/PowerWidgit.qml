@@ -54,17 +54,17 @@ PopupWindow {
 
     Process {
         id: shutdownProcess
-        command: ["bash", "-c", "$HOME/.config/quickshell/scripts/shutdown.sh"]
+        command: ["bash", "-c", "$HOME/.config/quickshell/scripts/shutdown.sh"] // .sh file for your ease of use / chaining.  "shutdown.sh"
     }
 
     Process {
         id: sleepProc
-        command: ["bash", "-c", "$HOME/.config/quickshell/scripts/sleep.sh"]
+        command: ["bash", "-c", "$HOME/.config/quickshell/scripts/sleep.sh"] // .sh file for your ease of use / chaining.  "sleep.sh"
     }
 
     Process {
         id: logoutProc
-        command: ["bash", "-c", "$HOME/.config/quickshell/scripts/logout.sh"]
+        command: ["bash", "-c", "$HOME/.config/quickshell/scripts/logout.sh"] // .sh file for your ease of use / chaining.  "logout.sh"
     }
 
     Rectangle {
