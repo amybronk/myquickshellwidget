@@ -8,9 +8,8 @@ PopupWindow {
     visible: true
     color: "transparent"
 
-	implicitHeight: 390
-    implicitWidth: 180
-
+    implicitHeight: 345
+    implicitWidth: 200
 
     anchor {
         window: barWindow
@@ -22,7 +21,7 @@ PopupWindow {
         )
     }
 
-        // --- mouse detection ---
+    // --- mouse detection ---
     HoverHandler {
         id: popupHover
         onHoveredChanged: {
@@ -45,21 +44,32 @@ PopupWindow {
 
     Process {
         id: openerQmlDir
-        command: ["bash", "-c", "xdg-open $HOME/.config/quickshell/"]
+        command: ["bash", "-c", "xdg-open " + Style.quickshellDir]
     }
 
     Process {
         id: openerSaveStates
-        command: ["bash", "-c", "xdg-open $HOME/.config/quickshell/SaveStates_txt/"]
+        command: ["bash", "-c", "xdg-open " + Style.saveStatDir]
     }
 
+    Process {
+        id: shutdownProcess
+        command: ["bash", "-c", "$HOME/.config/quickshell/scripts/shutdown.sh"]
+    }
 
+    Process {
+        id: sleepProc
+        command: ["bash", "-c", "$HOME/.config/quickshell/scripts/sleep.sh"]
+    }
+
+    Process {
+        id: logoutProc
+        command: ["bash", "-c", "$HOME/.config/quickshell/scripts/logout.sh"]
+    }
 
     Rectangle {
         id: rootui
-        anchors {
-            fill: parent
-        }
+        anchors.fill: parent
 
         color: Style.popupAchtergrondKleur
         radius: Style.radiusGrooteM
@@ -73,23 +83,83 @@ PopupWindow {
         Rectangle {
             id: powerProfilleSlector
 
+            property string huidigProfiel: ""
+            property var    profielen:     ["power-saver", "balanced", "performance"]
+
             border {
                 color: Style.borderKleur
                 width: Style.borderSize
             }
 
             height: Style.barHoogte
-            color: "transparent"
+            color:  "transparent"
             radius: Style.radiusGrooteM
 
             anchors {
-                top: parent.top
-                left: parent.left
+                top:   parent.top
+                left:  parent.left
                 right: parent.right
 
-                topMargin: Style.uiMarginsL
-                leftMargin: Style.uiMarginsL
-                rightMargin: Style.uiMarginsL
+                topMargin:   Style.uiMarginsM
+                leftMargin:  Style.uiMarginsM
+                rightMargin: Style.uiMarginsM
+            }
+
+            // huidig profiel ophalen bij opstarten
+            Process {
+                id: getProfielProc
+                command: ["powerprofilesctl", "get"]
+                running: true
+                stdout: SplitParser {
+                    onRead: data => {
+                        const t = data.trim()
+                        if (t !== "") powerProfilleSlector.huidigProfiel = t
+                    }
+                }
+            }
+
+            // profiel instellen
+            Process {
+                id: setProfielProc
+                property string doel: ""
+                command: ["powerprofilesctl", "set", doel]
+                onExited: (code, _) => {
+                    if (code === 0) powerProfilleSlector.huidigProfiel = doel
+                }
+            }
+
+            Row {
+                anchors.centerIn: parent
+                spacing: 8
+
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: powerProfilleSlector.huidigProfiel !== ""
+                          ? powerProfilleSlector.huidigProfiel
+                          : "laden…"
+                    color: Style.textKleur2
+                    font {
+                        pixelSize: 18
+                        bold:      true
+                    }
+                }
+
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text:  "▾"
+                    color: Style.textKleur2
+                    font.pixelSize: 14
+                }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape:  Qt.PointingHandCursor
+                onClicked: {
+                    // sluit de andere dropdown als die open is
+                    bestandDropdown.visible = false
+                    profielDropdown.visible = !profielDropdown.visible
+                }
             }
         }
 
@@ -97,47 +167,209 @@ PopupWindow {
         Rectangle {
             id: timeLengtSelector
 
+            // huidige waarde in minuten — gebruik timeLengtSelector.minuten elders
+            property int minuten: 5
+
             border {
                 color: Style.borderKleur
                 width: Style.borderSize
             }
 
             height: Style.barHoogte
-            color: "transparent"
+            color:  "transparent"
             radius: Style.radiusGrooteM
 
             anchors {
-                top: powerProfilleSlector.bottom
-                left: parent.left
+                top:   powerProfilleSlector.bottom
+                left:  parent.left
                 right: parent.right
 
-                topMargin: Style.uiMarginsL
-                leftMargin: Style.uiMarginsL
-                rightMargin: Style.uiMarginsL
+                topMargin:   Style.uiMarginsM
+                leftMargin:  Style.uiMarginsM
+                rightMargin: Style.uiMarginsM
+            }
+
+            // --- min knop ---
+            Rectangle {
+                id: minusMinut
+
+                width: 40
+                color: "transparent"
+
+                anchors {
+                    top:    parent.top
+                    bottom: parent.bottom
+                    left:   parent.left
+                }
+
+                Text {
+                    anchors.centerIn: parent
+                    text:  "-"
+                    color: Style.textKleur2
+                    font { pixelSize: 18; bold: true }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape:  Qt.PointingHandCursor
+                    // ingedrukt houden telt sneller af
+                    onClicked: {
+                        if (timeLengtSelector.minuten > 1)
+                            timeLengtSelector.minuten -= 1
+                    }
+                    onPressAndHold: herhaalTimer.start()
+                    onReleased:     herhaalTimer.stop()
+
+                    Timer {
+                        id: herhaalTimer
+                        interval: 80
+                        repeat:   true
+                        onTriggered: {
+                            if (timeLengtSelector.minuten > 1)
+                                timeLengtSelector.minuten -= 1
+                            else
+                                herhaalTimer.stop()
+                        }
+                    }
+                }
+            }
+
+            // --- getal invoerveld ---
+            Rectangle {
+                id: minetAmount
+
+                color:  "transparent"
+                border { color: Style.borderKleur; width: Style.borderSize }
+
+                anchors {
+                    top:    parent.top
+                    bottom: parent.bottom
+                    left:   minusMinut.right
+                    right:  plusMinut.left
+                }
+
+                TextInput {
+                    id: minutenInput
+
+                    anchors.centerIn: parent
+                    width: parent.width - 8
+
+                    text:  timeLengtSelector.minuten.toString()
+                    color: Style.textKleur2
+                    font { pixelSize: 18; bold: true }
+
+                    horizontalAlignment: TextInput.AlignHCenter
+                    selectByMouse:       true
+                    cursorVisible:       activeFocus
+
+                    // alleen cijfers 1–999
+                    validator: IntValidator { bottom: 1; top: 999 }
+
+                    // pas de property aan zodra de tekst verandert
+                    onTextChanged: {
+                        const v = parseInt(text)
+                        if (!isNaN(v) && v >= 1)
+                            timeLengtSelector.minuten = v
+                    }
+
+                    // herstel naar huidige waarde als het veld leeg of ongeldig is
+                    onEditingFinished: {
+                        const v = parseInt(text)
+                        if (isNaN(v) || v < 1)
+                            text = timeLengtSelector.minuten.toString()
+                    }
+
+                    // houd het invoerveld synchroon met de knoppen
+                    Binding {
+                        target:   minutenInput
+                        property: "text"
+                        value:    timeLengtSelector.minuten.toString()
+                        when:     !minutenInput.activeFocus
+                    }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape:  Qt.IBeamCursor
+                    onClicked:    minutenInput.forceActiveFocus()
+                }
+            }
+
+            // --- plus knop ---
+            Rectangle {
+                id: plusMinut
+
+                width: 40
+                color: "transparent"
+
+                anchors {
+                    top:    parent.top
+                    bottom: parent.bottom
+                    right:  parent.right
+                }
+
+                Text {
+                    anchors.centerIn: parent
+                    text:  "+"
+                    color: Style.textKleur2
+                    font { pixelSize: 18; bold: true }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape:  Qt.PointingHandCursor
+                    onClicked: {
+                        if (timeLengtSelector.minuten < 999)
+                            timeLengtSelector.minuten += 1
+                    }
+                    onPressAndHold: herhaalTimerPlus.start()
+                    onReleased:     herhaalTimerPlus.stop()
+
+                    Timer {
+                        id: herhaalTimerPlus
+                        interval: 80
+                        repeat:   true
+                        onTriggered: {
+                            if (timeLengtSelector.minuten < 999)
+                                timeLengtSelector.minuten += 1
+                            else
+                                herhaalTimerPlus.stop()
+                        }
+                    }
+                }
             }
         }
+
 
         // --- start shutdown timer ---
         Rectangle {
             id: powerDouwnTimerStart
 
-            border {
-                color: Style.borderKleur
-                width: Style.borderSize
-            }
-
+            border { color: Style.borderKleur; width: Style.borderSize }
             height: Style.barHoogte
-            color: "transparent"
+            color:  "transparent"
             radius: Style.radiusGrooteM
 
             anchors {
                 top: timeLengtSelector.bottom
                 left: parent.left
                 right: parent.right
+                topMargin:   Style.uiMarginsM
+                leftMargin:  Style.uiMarginsM
+                rightMargin: Style.uiMarginsM
+            }
 
-                topMargin: Style.uiMarginsL
-                leftMargin: Style.uiMarginsL
-                rightMargin: Style.uiMarginsL
+            Text {
+                anchors.centerIn: parent
+                text:  "Shut Down in "
+                color: Style.textKleur2
+                font { pixelSize: 18; bold: true }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape:  Qt.PointingHandCursor
+                onClicked:    shutdownConfirmWindow.active = true
             }
         }
 
@@ -145,23 +377,64 @@ PopupWindow {
         Rectangle {
             id: sleepLogOut
 
-            border {
-                color: Style.borderKleur
-                width: Style.borderSize
-            }
-
             height: Style.barHoogte
-            color: "transparent"
-            radius: Style.radiusGrooteM
+            color:  "transparent"
 
             anchors {
                 top: powerDouwnTimerStart.bottom
                 left: parent.left
                 right: parent.right
+                topMargin:   Style.uiMarginsM
+                leftMargin:  Style.uiMarginsM
+                rightMargin: Style.uiMarginsM
+            }
 
-                topMargin: Style.uiMarginsL
-                leftMargin: Style.uiMarginsL
-                rightMargin: Style.uiMarginsL
+            Rectangle {
+                id: sleepButton
+
+                width:  (rootui.width - (Style.uiMarginsM * 3)) / 2
+                color:  "transparent"
+                radius: Style.radiusGrooteM
+                border { color: Style.borderKleur; width: Style.borderSize }
+
+                anchors { top: parent.top; bottom: parent.bottom; left: parent.left }
+
+                Text {
+                    anchors.centerIn: parent
+                    text:  "Sleep"
+                    color: Style.textKleur2
+                    font { pixelSize: 18; bold: true }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape:  Qt.PointingHandCursor
+                    onClicked: {}
+                }
+            }
+
+            Rectangle {
+                id: logOutBrutton
+
+                width:  (rootui.width - (Style.uiMarginsM * 3)) / 2
+                color:  "transparent"
+                radius: Style.radiusGrooteM
+                border { color: Style.borderKleur; width: Style.borderSize }
+
+                anchors { top: parent.top; bottom: parent.bottom; right: parent.right }
+
+                Text {
+                    anchors.centerIn: parent
+                    text:  "Log Out"
+                    color: Style.textKleur2
+                    font { pixelSize: 18; bold: true }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape:  Qt.PointingHandCursor
+                    onClicked: {}
+                }
             }
         }
 
@@ -169,23 +442,84 @@ PopupWindow {
         Rectangle {
             id: saveStateSelector
 
-            border {
-                color: Style.borderKleur
-                width: Style.borderSize
-            }
+            property string map:                 "$HOME/.config/quickshell/SaveStates_txt"
+            property string filterExt:           ".txt"
+            property string geselecteerdBestand: "latest.txt"
 
+            readonly property string geselecteerdPad:
+                geselecteerdBestand !== "" ? Style.saveState + "/" + geselecteerdBestand : ""
+
+            signal bestandGekozen(string pad)
+
+            border { color: Style.borderKleur; width: Style.borderSize }
             height: Style.barHoogte
-            color: "transparent"
+            color:  "transparent"
             radius: Style.radiusGrooteM
 
             anchors {
-                top: sleepLogOut.bottom
-                left: parent.left
+                top:   sleepLogOut.bottom
+                left:  parent.left
                 right: parent.right
+                topMargin:   Style.uiMarginsM
+                leftMargin:  Style.uiMarginsM
+                rightMargin: Style.uiMarginsM
+            }
 
-                topMargin: Style.uiMarginsL
-                leftMargin: Style.uiMarginsL
-                rightMargin: Style.uiMarginsL
+            ListModel { id: bestandenModel }
+
+            function laadBestanden() {
+                bestandenModel.clear()
+                lsProc.running = true
+            }
+
+            Component.onCompleted: laadBestanden()
+
+            Process {
+                id: lsProc
+                command: ["bash", "-c", "ls -1p " + saveStateSelector.map + " 2>/dev/null"]
+                stdout: SplitParser {
+                    onRead: regel => {
+                        const naam = regel.trim()
+                        if (naam === "" || naam.endsWith("/")) return
+                        if (saveStateSelector.filterExt !== ""
+                            && !naam.endsWith(saveStateSelector.filterExt)) return
+                        bestandenModel.append({ bestandNaam: naam })
+                    }
+                }
+            }
+
+            Row {
+                anchors.centerIn: parent
+                spacing: 8
+
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text:  saveStateSelector.geselecteerdBestand !== ""
+                           ? saveStateSelector.geselecteerdBestand
+                           : "Kies save state…"
+                    color: Style.textKleur2
+                    font { pixelSize: 18; bold: true }
+                    elide:            Text.ElideRight
+                    maximumLineCount: 1
+                }
+
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text:  "▾"
+                    color: Style.textKleur2
+                    font.pixelSize: 14
+                }
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape:  Qt.PointingHandCursor
+                onClicked: {
+                    saveStateSelector.laadBestanden()
+                    // sluit de andere dropdown als die open is
+                    profielDropdown.visible = false
+                    bestandDropdown.visible = !bestandDropdown.visible
+                }
             }
         }
 
@@ -193,23 +527,64 @@ PopupWindow {
         Rectangle {
             id: saveLoadSaveState
 
-            border {
-                color: Style.borderKleur
-                width: Style.borderSize
-            }
-
             height: Style.barHoogte
-            color: "transparent"
-            radius: Style.radiusGrooteM
+            color:  "transparent"
 
             anchors {
                 top: saveStateSelector.bottom
                 left: parent.left
                 right: parent.right
+                topMargin:   Style.uiMarginsM
+                leftMargin:  Style.uiMarginsM
+                rightMargin: Style.uiMarginsM
+            }
 
-                topMargin: Style.uiMarginsL
-                leftMargin: Style.uiMarginsL
-                rightMargin: Style.uiMarginsL
+            Rectangle {
+                id: saveSaveState
+
+                width:  (rootui.width - (Style.uiMarginsM * 3)) / 2
+                color:  "transparent"
+                radius: Style.radiusGrooteM
+                border { color: Style.borderKleur; width: Style.borderSize }
+
+                anchors { top: parent.top; bottom: parent.bottom; left: parent.left }
+
+                Text {
+                    anchors.centerIn: parent
+                    text:  "Save"
+                    color: Style.textKleur2
+                    font { pixelSize: 18; bold: true }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape:  Qt.PointingHandCursor
+                    onClicked: {}
+                }
+            }
+
+            Rectangle {
+                id: loadSaveState
+
+                width:  (rootui.width - (Style.uiMarginsM * 3)) / 2
+                color:  "transparent"
+                radius: Style.radiusGrooteM
+                border { color: Style.borderKleur; width: Style.borderSize }
+
+                anchors { top: parent.top; bottom: parent.bottom; right: parent.right }
+
+                Text {
+                    anchors.centerIn: parent
+                    text:  "Load"
+                    color: Style.textKleur2
+                    font { pixelSize: 18; bold: true }
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape:  Qt.PointingHandCursor
+                    onClicked: {}
+                }
             }
         }
 
@@ -217,87 +592,233 @@ PopupWindow {
         Rectangle {
             id: shutdown
 
-            border {
-                color: Style.borderKleur
-                width: Style.borderSize
-            }
-
+            border { color: Style.borderKleur; width: Style.borderSize }
             height: Style.barHoogte
-            color: "transparent"
+            color:  "transparent"
             radius: Style.radiusGrooteM
 
             anchors {
                 top: saveLoadSaveState.bottom
                 left: parent.left
                 right: parent.right
+                topMargin:   Style.uiMarginsM
+                leftMargin:  Style.uiMarginsM
+                rightMargin: Style.uiMarginsM
+            }
 
-                topMargin: Style.uiMarginsL
-                leftMargin: Style.uiMarginsL
-                rightMargin: Style.uiMarginsL
+            Text {
+                anchors.centerIn: parent
+                text:  "Shut Down"
+                color: Style.textKleur2
+                font { pixelSize: 18; bold: true }
             }
 
             MouseArea {
                 anchors.fill: parent
-                cursorShape: Qt.PointingHandCursor
-                onClicked: {
-                    shutdownConfirmWindow.active = true
-                }
+                cursorShape:  Qt.PointingHandCursor
+                onClicked:    shutdownProcess.running = true
             }
         }
 
         Text {
             id: saveStatDir
-
-            text: "save state"
-
+            text:  "save state"
             color: Style.textKleur2
-
-            font {
-                pixelSize: Style.fontGrootteL
-            }
-
+            font.pixelSize: Style.fontGrootteL
             anchors {
-                top: shutdown.bottom
+                top:  shutdown.bottom
                 left: parent.left
-
-                topMargin: Style.uiMarginsL
+                topMargin:  Style.uiMarginsM
                 leftMargin: Style.uiMarginsL
             }
-
             MouseArea {
                 anchors.fill: parent
-                cursorShape: Qt.PointingHandCursor
-                onClicked: {
-                    openerSaveStates.running = true
-                }
+                cursorShape:  Qt.PointingHandCursor
+                onClicked:    openerSaveStates.running = true
             }
         }
 
         Text {
             id: qmlConfig
-
-            text: "qml"
-
+            text:  "qml"
             color: Style.textKleur2
-
-            font {
-                pixelSize: Style.fontGrootteL
-            }
-
+            font.pixelSize: Style.fontGrootteL
             anchors {
-                top: shutdown.bottom
+                top:   shutdown.bottom
                 right: parent.right
-
-                topMargin: Style.uiMarginsL
+                topMargin:   Style.uiMarginsM
                 rightMargin: Style.uiMarginsL
             }
-
             MouseArea {
                 anchors.fill: parent
-                cursorShape: Qt.PointingHandCursor
-                onClicked: {
-                    openerQmlDir.running = true
+                cursorShape:  Qt.PointingHandCursor
+                onClicked:    openerQmlDir.running = true
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════════
+        // DROPDOWN OVERLAYS — altijd aan het einde zodat ze bovenop renderen
+        // ═══════════════════════════════════════════════════════════════
+
+        // --- transparante achtergrond om dropdowns te sluiten ---
+        MouseArea {
+            anchors.fill: parent
+            z: 5
+            visible: profielDropdown.visible || bestandDropdown.visible
+            onClicked: {
+                profielDropdown.visible = false
+                bestandDropdown.visible = false
+            }
+        }
+
+        // --- power profiel dropdown overlay ---
+        Rectangle {
+            id: profielDropdown
+            visible: false
+            z: 10
+
+            x:      Style.uiMarginsM
+            y:      powerProfilleSlector.y + powerProfilleSlector.height + Style.uiMarginsM / 2
+            width:  rootui.width - Style.uiMarginsM * 2
+
+            // hoogte = aantal profielen × (barHoogte + spacing) + padding
+            height: powerProfilleSlector.profielen.length
+                    * (Style.barHoogte + Style.uiMarginsM)
+                    + Style.uiMarginsM
+
+            color:  Style.popupAchtergrondKleur
+            radius: Style.radiusGrooteM
+            border { color: Style.borderKleur; width: Style.borderSize }
+
+            Column {
+                anchors {
+                    top:   parent.top
+                    left:  parent.left
+                    right: parent.right
+                    topMargin:   Style.uiMarginsM
+                    leftMargin:  Style.uiMarginsM
+                    rightMargin: Style.uiMarginsM
                 }
+                spacing: Style.uiMarginsM / 2
+
+                Repeater {
+                    model: powerProfilleSlector.profielen
+
+                    Rectangle {
+                        width:  parent.width
+                        height: Style.barHoogte
+                        color:  "transparent"
+                        radius: Style.radiusGrooteM
+                        border {
+                            color: modelData === powerProfilleSlector.huidigProfiel
+                                   ? Style.textKleur2
+                                   : Style.borderKleur
+                            width: Style.borderSize
+                        }
+
+                        Text {
+                            anchors.centerIn: parent
+                            text:  modelData
+                            color: Style.textKleur2
+                            font {
+                                pixelSize: 18
+                                bold: modelData === powerProfilleSlector.huidigProfiel
+                            }
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape:  Qt.PointingHandCursor
+                            onClicked: {
+                                setProfielProc.doel    = modelData
+                                setProfielProc.running = true
+                                profielDropdown.visible = false
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // --- bestand dropdown overlay ---
+        Rectangle {
+            id: bestandDropdown
+            visible: false
+            z: 10
+
+            x:      Style.uiMarginsM
+            y:      saveStateSelector.y + saveStateSelector.height + Style.uiMarginsM / 2
+            width:  rootui.width - Style.uiMarginsM * 2
+            // maximaal 4 items zichtbaar, daarna scroll
+            height: Math.min(
+                        bestandenModel.count * (Style.barHoogte + Style.uiMarginsM / 2)
+                        + Style.uiMarginsM * 2,
+                        (Style.barHoogte + Style.uiMarginsM / 2) * 4 + Style.uiMarginsM * 2
+                    )
+
+            color:  Style.popupAchtergrondKleur
+            radius: Style.radiusGrooteM
+            border { color: Style.borderKleur; width: Style.borderSize }
+
+            // lege staat
+            Text {
+                anchors.centerIn: parent
+                visible:   bestandenModel.count === 0
+                text:      "Geen bestanden"
+                color:     Style.textKleur2
+                font { pixelSize: 16; bold: false }
+            }
+
+            ListView {
+                id: bestandenLijst
+                visible: bestandenModel.count > 0
+                model:   bestandenModel
+                clip:    true
+                spacing: Style.uiMarginsM / 2
+
+                anchors {
+                    fill:        parent
+                    topMargin:   Style.uiMarginsM
+                    bottomMargin: Style.uiMarginsM
+                    leftMargin:  Style.uiMarginsM
+                    rightMargin: Style.uiMarginsM
+                }
+
+                delegate: Rectangle {
+                    width:  bestandenLijst.width
+                    height: Style.barHoogte
+                    color:  "transparent"
+                    radius: Style.radiusGrooteM
+                    border {
+                        color: model.bestandNaam === saveStateSelector.geselecteerdBestand
+                               ? Style.textKleur2
+                               : Style.borderKleur
+                        width: Style.borderSize
+                    }
+
+                    Text {
+                        anchors.centerIn: parent
+                        text:  model.bestandNaam
+                        color: Style.textKleur2
+                        font {
+                            pixelSize: 18
+                            bold: model.bestandNaam === saveStateSelector.geselecteerdBestand
+                        }
+                        elide:            Text.ElideRight
+                        maximumLineCount: 1
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape:  Qt.PointingHandCursor
+                        onClicked: {
+                            saveStateSelector.geselecteerdBestand = model.bestandNaam
+                            saveStateSelector.bestandGekozen(saveStateSelector.geselecteerdPad)
+                            bestandDropdown.visible = false
+                        }
+                    }
+                }
+
             }
         }
     }

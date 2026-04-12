@@ -51,4 +51,8 @@ Item {
 
     readonly property int appletAppAmount: 2
     readonly property int appletDrawrAmount: 2
+
+    readonly property string saveState: "$HOME/.config/quickshell/SaveStates_txt/"
+    readonly property string quickshellDir: "$HOME/.config/quickshell/"
+    readonly property string saveStatDir: "$HOME/.config/quickshell/SaveStates_txt/"
 }
