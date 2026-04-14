@@ -1,4 +1,5 @@
 pragma Singleton
+import QtCore
 import QtQuick
 
 // you can find the list of Favorited apps in Favorites.qml at ~/.config/quickshell/AppPallet_qml/Favorites.qml
@@ -55,4 +56,6 @@ Item {
     readonly property string saveState: "$HOME/.config/quickshell/SaveStates_txt/"
     readonly property string quickshellDir: "$HOME/.config/quickshell/"
     readonly property string saveStatDir: "$HOME/.config/quickshell/SaveStates_txt/"
+    readonly property string rootConfigDir: StandardPaths.standardLocations(
+        StandardPaths.HomeLocation)[0].toString().replace("file://", "") + "/.config/quickshell/"
 }

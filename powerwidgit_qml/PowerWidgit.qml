@@ -8,6 +8,8 @@ PopupWindow {
     visible: true
     color: "transparent"
 
+    property int minuten: 5
+
     implicitHeight: 345
     implicitWidth: 200
 
@@ -52,19 +54,34 @@ PopupWindow {
         command: ["bash", "-c", "xdg-open " + Style.saveStatDir]
     }
 
+    // .sh file for your ease of use / chaining.  "shutdown.sh"
     Process {
         id: shutdownProcess
-        command: ["bash", "-c", "$HOME/.config/quickshell/scripts/shutdown.sh"] // .sh file for your ease of use / chaining.  "shutdown.sh"
+        command: ["bash", Style.rootConfigDir + "scripts/shutdown.sh", timeLengtSelector.minuten.toString()]
+        onStarted: console.log("shutdown over", timeLengtSelector.minuten, "minuten")
+        onExited: (code, status) => console.log("exitcode:", code)
+    }
+
+    // directe shutdown — geen argument = "now"
+    Process {
+        id: shutdownNowProcess
+        command: ["bash", Style.rootConfigDir + "scripts/shutdown.sh"]
+        onStarted: console.log("shutdown now")
+        onExited: (code, status) => console.log("exitcode:", code)
     }
 
     Process {
         id: sleepProc
-        command: ["bash", "-c", "$HOME/.config/quickshell/scripts/sleep.sh"] // .sh file for your ease of use / chaining.  "sleep.sh"
+        command: ["bash", "-c", Style.rootConfigDir + "scripts/sleep.sh"] // .sh file for your ease of use / chaining.  "sleep.sh"
+        onStarted: console.log("pad:", Style.rootConfigDir + "scripts/sleep.sh")
+        onExited: (code, status) => console.log("exitcode:", code)
     }
 
     Process {
         id: logoutProc
-        command: ["bash", "-c", "$HOME/.config/quickshell/scripts/logout.sh"] // .sh file for your ease of use / chaining.  "logout.sh"
+        command: ["bash", "-c", Style.rootConfigDir + "scripts/logout.sh"] // .sh file for your ease of use / chaining.  "logout.sh"
+        onStarted: console.log("pad:", Style.rootConfigDir + "scripts/logout.sh")
+        onExited: (code, status) => console.log("exitcode:", code)
     }
 
     Rectangle {
@@ -168,7 +185,6 @@ PopupWindow {
             id: timeLengtSelector
 
             // huidige waarde in minuten — gebruik timeLengtSelector.minuten elders
-            property int minuten: 5
 
             border {
                 color: Style.borderKleur
@@ -369,7 +385,7 @@ PopupWindow {
             MouseArea {
                 anchors.fill: parent
                 cursorShape:  Qt.PointingHandCursor
-                onClicked:    shutdownConfirmWindow.active = true
+                onClicked:    shutdownProcess.running = true
             }
         }
 
@@ -616,7 +632,9 @@ PopupWindow {
             MouseArea {
                 anchors.fill: parent
                 cursorShape:  Qt.PointingHandCursor
-                onClicked:    shutdownProcess.running = true
+                onClicked: {
+                    shutdownNowProcess.running = true
+                }
             }
         }
 
