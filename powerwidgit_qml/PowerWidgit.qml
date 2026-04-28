@@ -57,7 +57,7 @@ PopupWindow {
     // .sh file for your ease of use / chaining.  "shutdown.sh"
     Process {
         id: shutdownProcess
-        command: ["bash", Style.rootConfigDir + "scripts/shutdown.sh", timeLengtSelector.minuten.toString()]
+        command: ["bash", Style.rootConfigDir + "scripts/shutdown.sh", timeLengtSelecvscodiutor.minuten.toString()]
         onStarted: console.log("shutdown over", timeLengtSelector.minuten, "minuten")
         onExited: (code, status) => console.log("exitcode:", code)
     }
