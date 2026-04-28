@@ -9,6 +9,7 @@ set -e  # stop bij een fout
 
 REPO_URL="https://github.com/amybronk/myquickshellwidget.git"
 CONFIG_DIR="$HOME/.config/quickshell"
+INSTALL_SCRIPT_DIR="$CONFIG_DIR/scripts/install_scripts/install-packages.sh"
 TEMP_DIR="/tmp/quickshell-install"
 
 echo ""
@@ -17,19 +18,12 @@ echo "║   QuickShell installatie             ║"
 echo "╚══════════════════════════════════════╝"
 echo ""
 
-# ── 1. packages installeren ──────────────────────────────────────
-echo ">>> Packages installeren..."
+# ── 1. git instaleeren ──────────────────────────────────────
 
 # detecteer package manager
 if command -v pacman &>/dev/null; then
-    sudo pacman -S --needed --noconfirm \
-        hyprland \
-        quickshell \
-        qt5-graphicaleffects \
-        qt6-declarative \
-        git \
-        libnotify
-    echo "✓ Packages geïnstalleerd via pacman"
+    sudo pacman -S --needed --noconfirm git
+    echo "✓ git geïnstalleerd via pacman"
 else
     echo "✗ Geen ondersteunde package manager gevonden (alleen pacman ondersteund)"
     exit 1
@@ -68,7 +62,7 @@ echo ""
 echo ">>> Scripts uitvoerbaar maken..."
 
 # maak alle .sh bestanden uitvoerbaar
-find "$CONFIG_DIR/scripts" -name "*.sh" -exec chmod +x {} \;
+find "$CONFIG_DIR/scripts" -maxdepth 2 -name "*.sh" -exec chmod +x {} +
 echo "✓ Scripts uitvoerbaar gemaakt"
 
 # ── 5. sudoers regel voor shutdown ──────────────────────────────
@@ -85,8 +79,14 @@ if [ ! -f "$SUDOERS_BESTAND" ]; then
 else
     echo "✓ Sudoers regel bestaat al"
 fi
+# ── 6. packages installeren ──────────────────────────────────────
 
-# ── 6. init systeem detecteren ───────────────────────────────────
+echo ">>> Packages installeren..."
+
+# sript for easy separation of pkg's and swichable for everybody
+bash "$INSTALL_SCRIPT_DIR"
+
+# ── 7. init systeem detecteren ───────────────────────────────────
 echo ""
 echo ">>> Init systeem detecteren..."
 
@@ -111,18 +111,18 @@ else
     HEEFT_LOGINCTL="false"
 fi
 
-echo "$INIT" > "$CONFIG_DIR/init-system"
-echo "$HEEFT_LOGINCTL" > "$CONFIG_DIR/heeft-loginctl"
+echo "init= $INIT" > "$CONFIG_DIR/system_info.txt"
+echo "loginctl available= $HEEFT_LOGINCTL" > "$CONFIG_DIR/system_info.txt"
 echo "✓ Init systeem gedetecteerd: $INIT"
 echo "✓ loginctl beschikbaar: $HEEFT_LOGINCTL"
 
-# ── 7. opruimen ──────────────────────────────────────────────────
+# ── 8. opruimen ──────────────────────────────────────────────────
 echo ""
 echo ">>> Opruimen..."
 rm -rf "$TEMP_DIR"
 echo "✓ Temp bestanden verwijderd"
 
-# ── 8. klaar ─────────────────────────────────────────────────────
+# ── 9. klaar ─────────────────────────────────────────────────────
 echo ""
 echo "╔══════════════════════════════════════╗"
 echo "║   Installatie klaar!                 ║"
