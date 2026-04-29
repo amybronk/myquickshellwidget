@@ -13,7 +13,7 @@ Rectangle {
 
     border {
         color: Style.borderKleur
-        width: Style.borderSize
+        width: Style.barBorderSize
     }
 
     property bool tailscaleActief: false

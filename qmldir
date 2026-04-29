@@ -9,17 +9,20 @@ singleton Style 1.0 Style.qml
 #   defalt path
 #~/.config/quickshell/Bar_qml/
 Bar 1.0 Bar_qml/Bar.qml
+WorkeSpaceIndicator 1.0 Bar_qml/WorkeSpaceIndicator.qml
 
 #media widget
 #   defalt path
 #~/.config/quickshell/Media_qml/
 singleton MprisService 1.0 Media_qml/MprisService.qml
 MediaWidget 1.0 Media_qml/MediaWidget.qml
+MusicButtonElement 1.0 Media_qml/MusicButtonElement.qml
 
 #klok widget
 #   defalt path
 #~/.config/quickshell/Klok_qml/
 KlokWidget 1.0 Klok_qml/KlokWidget.qml
+KlokButton 1.0 Klok_qml/KlokButton.qml
 
 #loos reuseble elements
 #   defalt path
@@ -45,9 +48,11 @@ singleton RecentApps 1.0 AppPallet_qml/RecentApps.qml
 singleton OpenApps 1.0 AppPallet_qml/OpenApps.qml
 AppPallet 1.0 AppPallet_qml/AppPallet.qml
 SaveLastSession 1.0 AppPallet_qml/SaveLastSession.qml
+AppPalletButton 1.0 AppPallet_qml/AppPalletButton.qml
 
 #power maneger
 #   defalt path
 #~/.config/quickshell/powerwidgit_qml/
 PowerWidgit 1.0 powerwidgit_qml/PowerWidgit.qml
 PowerOffConformation 1.0 powerwidgit_qml/PowerOffConformation.qml
+PowerButtonElement 1.0 powerwidgit_qml/PowerButtonElement.qml
