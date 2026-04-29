@@ -94,6 +94,7 @@ PanelWindow {
 			top: parent.top
 			right: tailscaleButton.left
 			bottom: parent.bottom
+			
 			topMargin: Style.topBarMargins
 			rightMargin: Style.uiMarginsS
 			bottomMargin: Style.bottomBarMargins
@@ -107,6 +108,7 @@ PanelWindow {
 			top: parent.top
 			right: klok.left
 			bottom: parent.bottom
+
 			topMargin: Style.topBarMargins
 			rightMargin: Style.uiMarginsM
 			bottomMargin: Style.bottomBarMargins
@@ -115,7 +117,7 @@ PanelWindow {
 	
 	KlokButton {
 		id: klok
-		
+
 		anchors {
 			top: parent.top
 			right: parent.right
