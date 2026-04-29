@@ -8,7 +8,7 @@ import QtQuick
 
 Item {
     // Kleuren
-    readonly property color achtergrondKleur: '#5d2b2b2b'
+    readonly property color achtergrondKleur: '#d31f1f1f'
     readonly property color popupAchtergrondKleur: '#eb2b2b2b'
     readonly property color borderKleur: '#daaa00a4'
     readonly property color accentKleur: '#520050'
@@ -21,10 +21,19 @@ Item {
     readonly property color volleWerkbaldKleur: '#3d0000'
     readonly property color legeWerkbaldKleur: '#ffffff'
 
+    readonly property color colourRed: '#ff0000'
+    readonly property color colourBlue: '#0000ff'
+    readonly property color colourGreen: '#00ff00'
+    readonly property color colourPink: '#ff00d0'
+
     
     // Afmetingen
-    readonly property int barHoogte: 40
+    readonly property int barHoogte: 35
+    readonly property int barbuttonlengt: 60
+    readonly property int barBorderSize: 0
     readonly property int borderSize: 2
+    readonly property int topBarMargins: 2
+    readonly property int bottomBarMargins: 4
 
     readonly property int uiMarginsS: 2
     readonly property int uiMarginsM: 5
@@ -35,6 +44,7 @@ Item {
     readonly property int fontGrootteM: 10
     readonly property int fontGrootteL: 14
     readonly property int fontGrootteG: 22
+    readonly property int fontKlokgrote: ((barHoogte - (topBarMargins + bottomBarMargins)) / 2)
 
     //readonly property int iconGrooteS: 12
     readonly property int iconGrooteM: 18

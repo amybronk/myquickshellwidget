@@ -57,8 +57,8 @@ PopupWindow {
     // .sh file for your ease of use / chaining.  "shutdown.sh"
     Process {
         id: shutdownProcess
-        command: ["bash", Style.rootConfigDir + "scripts/shutdown.sh", timeLengtSelecvscodiutor.minuten.toString()]
-        onStarted: console.log("shutdown over", timeLengtSelector.minuten, "minuten")
+        command: ["bash", Style.rootConfigDir + "scripts/shutdown.sh", powermaneger.minuten.toString()]
+        onStarted: console.log("shutdown over", powermaneger.minuten, "minuten")
         onExited: (code, status) => console.log("exitcode:", code)
     }
 
@@ -184,7 +184,7 @@ PopupWindow {
         Rectangle {
             id: timeLengtSelector
 
-            // huidige waarde in minuten — gebruik timeLengtSelector.minuten elders
+            // huidige waarde in minuten — gebruik powermaneger.minuten elders
 
             border {
                 color: Style.borderKleur
@@ -230,8 +230,8 @@ PopupWindow {
                     cursorShape:  Qt.PointingHandCursor
                     // ingedrukt houden telt sneller af
                     onClicked: {
-                        if (timeLengtSelector.minuten > 1)
-                            timeLengtSelector.minuten -= 1
+                        if (powermaneger.minuten > 1)
+                            powermaneger.minuten -= 1
                     }
                     onPressAndHold: herhaalTimer.start()
                     onReleased:     herhaalTimer.stop()
@@ -241,8 +241,8 @@ PopupWindow {
                         interval: 80
                         repeat:   true
                         onTriggered: {
-                            if (timeLengtSelector.minuten > 1)
-                                timeLengtSelector.minuten -= 1
+                            if (powermaneger.minuten > 1)
+                                powermaneger.minuten -= 1
                             else
                                 herhaalTimer.stop()
                         }
@@ -270,7 +270,7 @@ PopupWindow {
                     anchors.centerIn: parent
                     width: parent.width - 8
 
-                    text:  timeLengtSelector.minuten.toString()
+                    text:  powermaneger.minuten.toString()
                     color: Style.textKleur2
                     font { pixelSize: 18; bold: true }
 
@@ -285,21 +285,21 @@ PopupWindow {
                     onTextChanged: {
                         const v = parseInt(text)
                         if (!isNaN(v) && v >= 1)
-                            timeLengtSelector.minuten = v
+                            powermaneger.minuten = v
                     }
 
                     // herstel naar huidige waarde als het veld leeg of ongeldig is
                     onEditingFinished: {
                         const v = parseInt(text)
                         if (isNaN(v) || v < 1)
-                            text = timeLengtSelector.minuten.toString()
+                            text = powermaneger.minuten.toString()
                     }
 
                     // houd het invoerveld synchroon met de knoppen
                     Binding {
                         target:   minutenInput
                         property: "text"
-                        value:    timeLengtSelector.minuten.toString()
+                        value:    powermaneger.minuten.toString()
                         when:     !minutenInput.activeFocus
                     }
                 }
@@ -335,8 +335,8 @@ PopupWindow {
                     anchors.fill: parent
                     cursorShape:  Qt.PointingHandCursor
                     onClicked: {
-                        if (timeLengtSelector.minuten < 999)
-                            timeLengtSelector.minuten += 1
+                        if (powermaneger.minuten < 999)
+                            powermaneger.minuten += 1
                     }
                     onPressAndHold: herhaalTimerPlus.start()
                     onReleased:     herhaalTimerPlus.stop()
@@ -346,8 +346,8 @@ PopupWindow {
                         interval: 80
                         repeat:   true
                         onTriggered: {
-                            if (timeLengtSelector.minuten < 999)
-                                timeLengtSelector.minuten += 1
+                            if (powermaneger.minuten < 999)
+                                powermaneger.minuten += 1
                             else
                                 herhaalTimerPlus.stop()
                         }
