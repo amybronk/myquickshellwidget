@@ -2,70 +2,101 @@ pragma Singleton
 import QtCore
 import QtQuick
 
-// you can find the list of Favorited apps in Favorites.qml at ~/.config/quickshell/AppPallet_qml/Favorites.qml
-
-// A path to all filles with short explanations for what thay do can be found at ~/.config/quickshell/notes/dir.md
-
 Item {
-    // Kleuren
-    readonly property color achtergrondKleur: '#d31f1f1f'
-    readonly property color popupAchtergrondKleur: '#eb2b2b2b'
-    readonly property color borderKleur: '#daaa00a4'
-    readonly property color accentKleur: '#520050'
+    id: root
 
-    readonly property color textKleur: '#ffffffff'
-    readonly property color textKleur2:'#aa00a4'
-    readonly property color negatiefTextKleur: '#ff000000'
+    // Deze map had je al gedefinieerd in je originele code!
+    readonly property string rootConfigDir: StandardPaths.standardLocations(StandardPaths.HomeLocation)[0].toString().replace("file://", "") + "/.config/quickshell/"
 
-    readonly property color actiefWerkbaldKleur: '#ff0000'
-    readonly property color volleWerkbaldKleur: '#3d0000'
-    readonly property color legeWerkbaldKleur: '#ffffff'
+    // De Settings module slaat de waarden op de hardeschijf op
+    Settings {
+        id: styleSettings
+        category: "Theme"
+        // Geen fileName meer nodig, Qt kiest nu automatisch:
+        // ~/.config/UserConfig/Quickshell.conf
+    }
 
-    readonly property color colourRed: '#ff0000'
-    readonly property color colourBlue: '#0000ff'
-    readonly property color colourGreen: '#00ff00'
-    readonly property color colourPink: '#ff00d0'
+    function getSetting(key, defaultValue) {
+        return styleSettings.value(key, defaultValue)
+    }
 
-    
-    // Afmetingen
-    readonly property int barHoogte: 35
-    readonly property int barbuttonlengt: 60
-    readonly property int barBorderSize: 0
-    readonly property int borderSize: 2
-    readonly property int topBarMargins: 2
-    readonly property int bottomBarMargins: 4
+    function setSetting(key, value) {
+        root[key] = value
+        styleSettings.setValue(key, value)
+    }
 
-    readonly property int uiMarginsS: 2
-    readonly property int uiMarginsM: 5
-    readonly property int uiMarginsL: 10
-    readonly property int uiMarginsG: 15
+    // --- KLEUREN ---
+    // Let op: 'readonly' is weg, en we gebruiken getSetting(Naam, DefaultWaarde)
+    property color achtergrondKleur: getSetting("achtergrondKleur", '#d31f1f1f')
+    property color popupAchtergrondKleur: getSetting("popupAchtergrondKleur", '#eb2b2b2b')
+    property color borderKleur: getSetting("borderKleur", '#daaa00a4')
+    property color accentKleur: getSetting("accentKleur", '#520050')
 
-    readonly property int fontGrootteS: 8
-    readonly property int fontGrootteM: 10
-    readonly property int fontGrootteL: 14
-    readonly property int fontGrootteG: 22
-    readonly property int fontKlokgrote: ((barHoogte - (topBarMargins + bottomBarMargins)) / 2)
+    property color textKleur: getSetting("textKleur", '#ffffffff')
+    property color textKleur2: getSetting("textKleur2", '#ff00d0')
+    property color textKleur3: getSetting("textKleur3", '#ff0000')
+    property color textKleur4: getSetting("textKleur4", '#0000ff')
+    property color negatiefTextKleur: getSetting("negatiefTextKleur", '#ff000000')
 
-    //readonly property int iconGrooteS: 12
-    readonly property int iconGrooteM: 18
-    //readonly property int iconGrooteL: 22
+    property color actiefWerkbaldKleur: getSetting("actiefWerkbaldKleur", '#ff0000')
+    property color volleWerkbaldKleur: getSetting("volleWerkbaldKleur", '#3d0000')
+    property color legeWerkbaldKleur: getSetting("legeWerkbaldKleur", '#ffffff')
 
-    readonly property int radiusGrooteS: 4
-    readonly property int radiusGrooteM: 10
-    //readonly property int radiusGrooteL: 14
-    readonly property int exitTimer: 350
+    property color colourRed: getSetting("colourRed", '#ff0000')
+    property color colourBlue: getSetting("colourBlue", '#0000ff')
+    property color colourGreen: getSetting("colourGreen", '#00ff00')
+    property color colourPink: getSetting("colourPink", '#ff00d0')
 
-    readonly property int fastRepeatTimer: 500
-    readonly property int slowRepeatTimer: 2000
+    // Je kunt de rest op exact dezelfde manier omzetten...
+    property int barHoogte: getSetting("barHoogte", 35)
+    property int barbuttonlengt: getSetting("barbuttonlengt", 60)
+    property int barBorderSize: getSetting("barBorderSize", 0)
+    property int borderSize: getSetting("borderSize", 2)
+    property int topBarMargins: getSetting("topBarMargins", 2)
+    property int bottomBarMargins: getSetting("bottomBarMargins", 4)
 
-    readonly property int sliderThickness: 8
+    property int uiMarginsS: getSetting("uiMarginsS", 2)
+    property int uiMarginsM: getSetting("uiMarginsM", 5)
+    property int uiMarginsL: getSetting("uiMarginsL", 10)
+    property int uiMarginsG: getSetting("uiMarginsG", 15)
 
-    readonly property int appletAppAmount: 2
-    readonly property int appletDrawrAmount: 2
+    property int fontGrootteS: getSetting("fontGrootteS", 8)
+    property int fontGrootteM: getSetting("fontGrootteM", 10)
+    property int fontGrootteL: getSetting("fontGrootteL", 14)
+    property int fontGrootteG: getSetting("fontGrootteG", 22)
+    property int fontKlokgrote: getSetting("fontKlokgrote", ((barHoogte - (topBarMargins + bottomBarMargins)) / 2))
 
+    property int iconGrooteS: getSetting("iconGrooteS", 12)
+    property int iconGrooteM: getSetting("iconGrooteM", 18)
+    property int iconGrooteL: getSetting("iconGrooteL", 22)
+
+    property int radiusGrooteS: getSetting("radiusGrooteS", 4)
+    property int radiusGrooteM: getSetting("radiusGrooteM", 10)
+    property int radiusGrooteL: getSetting("radiusGrooteL", 14)
+    property int exitTimer: getSetting("exitTimer", 350)
+
+    property int fastRepeatTimer: getSetting("fastRepeatTimer", 500)
+    property int slowRepeatTimer: getSetting("slowRepeatTimer", 2000)
+
+    property int sliderThickness: getSetting("sliderThickness", 8)
+
+    property int appletAppAmount: getSetting("appletAppAmount", 2)
+    property int appletDrawrAmount: getSetting("appletDrawrAmount", 2)
+
+    // Properties die NIET aangepast mogen worden in de UI kunnen 'readonly' blijven.
+    // Voeg deze namen eventueel toe aan de 'negeerLijst' in SettingsMenu.qml!
     readonly property string saveState: "$HOME/.config/quickshell/SaveStates_txt/"
     readonly property string quickshellDir: "$HOME/.config/quickshell/"
     readonly property string saveStatDir: "$HOME/.config/quickshell/SaveStates_txt/"
-    readonly property string rootConfigDir: StandardPaths.standardLocations(
-        StandardPaths.HomeLocation)[0].toString().replace("file://", "") + "/.config/quickshell/"
-}
+
+    readonly property var editableKeys: [
+        "achtergrondKleur", "popupAchtergrondKleur", "borderKleur", "accentKleur",
+        "textKleur", "textKleur2", "textKleur3", "textKleur4", "negatiefTextKleur", "actiefWerkbaldKleur", 
+        "volleWerkbaldKleur", "legeWerkbaldKleur", "colourRed", "colourBlue", "colourGreen", "colourPink",
+        "barHoogte", "barbuttonlengt", "barBorderSize", "borderSize","topBarMargins", "bottomBarMargins", 
+        "uiMarginsS", "uiMarginsM", "uiMarginsL", "uiMarginsG", "fontGrootteS", "fontGrootteM", "fontGrootteL", 
+        "fontGrootteG", "iconGrooteS", "iconGrooteM", "iconGrooteL", "radiusGrooteS", "radiusGrooteM", 
+        "radiusGrooteL", "exitTimer", "fastRepeatTimer", "slowRepeatTimer", "sliderThickness", "appletAppAmount", 
+        "appletDrawrAmount"
+    ]
+} 

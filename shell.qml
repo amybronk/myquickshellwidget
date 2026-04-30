@@ -1,4 +1,5 @@
 import Quickshell
+import QtCore
 import QtQuick
 import "."
 
@@ -6,6 +7,11 @@ import "."
 
 ShellRoot {
     id: shellRoot
+
+	Component.onCompleted: {
+        Qt.application.name = "Quickshell"
+        Qt.application.organization = "UserConfig"
+    }
 
     Bar { id: barWindow }
 
