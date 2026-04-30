@@ -25,29 +25,27 @@ Item {
         styleSettings.setValue(key, value)
     }
 
-    // --- KLEUREN ---
-    // Let op: 'readonly' is weg, en we gebruiken getSetting(Naam, DefaultWaarde)
+    // --- COLOUR ---
     property color achtergrondKleur: getSetting("achtergrondKleur", '#d31f1f1f')
     property color popupAchtergrondKleur: getSetting("popupAchtergrondKleur", '#eb2b2b2b')
     property color borderKleur: getSetting("borderKleur", '#daaa00a4')
     property color accentKleur: getSetting("accentKleur", '#520050')
 
     property color textKleur: getSetting("textKleur", '#ffffffff')
-    property color textKleur2: getSetting("textKleur2", '#ff00d0')
-    property color textKleur3: getSetting("textKleur3", '#ff0000')
-    property color textKleur4: getSetting("textKleur4", '#0000ff')
+    property color textColourLink: getSetting("textColourLink", '#ff00d0')
     property color negatiefTextKleur: getSetting("negatiefTextKleur", '#ff000000')
 
     property color actiefWerkbaldKleur: getSetting("actiefWerkbaldKleur", '#ff0000')
     property color volleWerkbaldKleur: getSetting("volleWerkbaldKleur", '#3d0000')
     property color legeWerkbaldKleur: getSetting("legeWerkbaldKleur", '#ffffff')
 
-    property color colourRed: getSetting("colourRed", '#ff0000')
-    property color colourBlue: getSetting("colourBlue", '#0000ff')
-    property color colourGreen: getSetting("colourGreen", '#00ff00')
-    property color colourPink: getSetting("colourPink", '#ff00d0')
+    property color colourPink: getSetting("colourPink", '#000000')
 
-    // Je kunt de rest op exact dezelfde manier omzetten...
+    property color colourPowerButton: getSetting("colourPowerButton", '#ff6cf5')
+    property color colourAppPalet: getSetting("colourAppPalet", '#70e2ff')
+    property color colourSettingsButton: getSetting("colourSettingsButton", '#86ffef')
+
+    // --- INT ---
     property int barHoogte: getSetting("barHoogte", 35)
     property int barbuttonlengt: getSetting("barbuttonlengt", 60)
     property int barBorderSize: getSetting("barBorderSize", 0)
@@ -83,16 +81,18 @@ Item {
     property int appletAppAmount: getSetting("appletAppAmount", 2)
     property int appletDrawrAmount: getSetting("appletDrawrAmount", 2)
 
-    // Properties die NIET aangepast mogen worden in de UI kunnen 'readonly' blijven.
-    // Voeg deze namen eventueel toe aan de 'negeerLijst' in SettingsMenu.qml!
+    // --- directorys ---
     readonly property string saveState: "$HOME/.config/quickshell/SaveStates_txt/"
     readonly property string quickshellDir: "$HOME/.config/quickshell/"
     readonly property string saveStatDir: "$HOME/.config/quickshell/SaveStates_txt/"
 
     readonly property var editableKeys: [
-        "achtergrondKleur", "popupAchtergrondKleur", "borderKleur", "accentKleur",
-        "textKleur", "textKleur2", "textKleur3", "textKleur4", "negatiefTextKleur", "actiefWerkbaldKleur", 
-        "volleWerkbaldKleur", "legeWerkbaldKleur", "colourRed", "colourBlue", "colourGreen", "colourPink",
+        // --- COLOUR ---
+        "achtergrondKleur", "popupAchtergrondKleur", "borderKleur", "accentKleur", "textKleur", "textColourLink", 
+        "negatiefTextKleur", "actiefWerkbaldKleur", "volleWerkbaldKleur", "legeWerkbaldKleur", "colourPink", 
+        "colourPowerButton", "colourAppPalet", "colourSettingsButton", 
+
+        // --- INT ---
         "barHoogte", "barbuttonlengt", "barBorderSize", "borderSize","topBarMargins", "bottomBarMargins", 
         "uiMarginsS", "uiMarginsM", "uiMarginsL", "uiMarginsG", "fontGrootteS", "fontGrootteM", "fontGrootteL", 
         "fontGrootteG", "iconGrooteS", "iconGrooteM", "iconGrooteL", "radiusGrooteS", "radiusGrooteM", 

@@ -60,3 +60,4 @@ PowerButtonElement 1.0 powerwidgit_qml/PowerButtonElement.qml
 # Settings Menu
 # ~/.config/quickshell/Settings_qml/
 SettingsMenu 1.0 Settings_qml/SettingsMenu.qml
+SettingsButtonElement 1.0 Settings_qml/SettingsButtonElement.qml

@@ -26,7 +26,7 @@ Rectangle {
 		verticalAlignment: Text.AlignVCenter
 
 		text: "⏻"
-		color: Style.colourPink
+		color: Style.colourPowerButton
 
 
 		font{ 

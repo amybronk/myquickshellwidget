@@ -26,8 +26,7 @@ Rectangle {
 		verticalAlignment: Text.AlignVCenter
 
 		text: "⌂"
-		color: Style.colourPink
-
+		color: Style.colourAppPalet
 
 		font{ 
 			pixelSize: apppallet.height * 0.85

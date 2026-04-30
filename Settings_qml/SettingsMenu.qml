@@ -14,6 +14,10 @@ Window {
 
     property var _keepAlive: settingsWin
 
+    onClosing: {
+        settingsWin.destroy() // Forceer vernietiging bij sluiten voor nette cleanup
+    }
+
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 20
@@ -55,7 +59,7 @@ Window {
                         Text {
                             // modelData is de naam van de property (bijv. "achtergrondKleur")
                             text: modelData 
-                            color: Style.textKleur2
+                            color: Style.textColourLink
                             Layout.fillWidth: true
                             font.pixelSize: Style.fontGrootteL
                         }

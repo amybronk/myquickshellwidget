@@ -89,7 +89,7 @@ PanelWindow {
 		}
 	}
 
-	Rectangle {
+	SettingsButtonElement {
 		id: settings
 
 		anchors {
@@ -101,50 +101,6 @@ PanelWindow {
 			rightMargin: Style.uiMarginsS
 			bottomMargin: Style.bottomBarMargins
 		}
-
-		visible: true
-			radius: Style.radiusGrooteM
-			width: Style.barbuttonlengt
-			color: Style.achtergrondKleur
-
-			border {
-				color: Style.borderKleur
-				width: Style.barBorderSize
-			}
-
-			Text {
-				anchors.centerIn: parent
-				text: "⚙"
-				color: Style.colourPink
-				// We gebruiken de hoogte van de parent (Rectangle) voor de font-grootte
-				font.pixelSize: parent.height * 0.7
-			}
-
-			MouseArea {
-            anchors.fill: parent
-            cursorShape: Qt.PointingHandCursor
-
-            onClicked: {
-                // Als er al een venster is, niet nog een maken
-                if (winInstance == null) {
-                    let component = Qt.createComponent(Qt.resolvedUrl("../Settings_qml/SettingsMenu.qml"))
-                    
-                    if (component.status === Component.Ready) {
-                        // Maak het object aan en sla het op in winInstance
-                        winInstance = component.createObject(null)
-                        
-                        // Zorg dat als het venster vernietigd wordt, we winInstance op null zetten
-                        winInstance.onDestroyed.connect(() => {
-                            winInstance = null
-                        })
-                    } else {
-                        console.error("Fout bij laden:", component.errorString())
-                    }
-                } else {
-                    winInstance.raise() // Breng bestaand venster naar voren
-                }
-            }
-        }
 	}
 
 	CameraIndicator {
