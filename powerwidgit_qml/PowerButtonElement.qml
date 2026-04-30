@@ -7,7 +7,7 @@ Rectangle {
 
     visible: true
 	radius: Style.radiusGrooteM
-	width: Style.barbuttonlengt
+	width: Style.barHoogte
 	color: Style.achtergrondKleur
 
 	border {

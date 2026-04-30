@@ -5,15 +5,48 @@ import QtQuick
 Item {
     id: root
 
-    // Deze map had je al gedefinieerd in je originele code!
     readonly property string rootConfigDir: StandardPaths.standardLocations(StandardPaths.HomeLocation)[0].toString().replace("file://", "") + "/.config/quickshell/"
 
-    // De Settings module slaat de waarden op de hardeschijf op
     Settings {
         id: styleSettings
         category: "Theme"
-        // Geen fileName meer nodig, Qt kiest nu automatisch:
         // ~/.config/UserConfig/Quickshell.conf
+    }
+
+    property var settingsWinInstance: null
+
+    function openSettings() {
+        // 1. Check of hij al bestaat
+        if (settingsWinInstance !== null && typeof settingsWinInstance !== "undefined" && settingsWinInstance.toString() !== "null") {
+            try {
+                settingsWinInstance.raise()
+                settingsWinInstance.requestActivate()
+                return // Stop hier, we zijn klaar
+            } catch (e) {
+                settingsWinInstance = null // Object was corrupt, reset en ga door naar aanmaken
+            }
+        }
+
+        // 2. Probeer het component te laden
+        // Gebruik het volledige pad vanaf de root om fouten te voorkomen
+        let component = Qt.createComponent(Qt.resolvedUrl("Settings_qml/SettingsMenu.qml"))
+        
+        if (component.status === Component.Ready) {
+            let obj = component.createObject(null)
+            
+            if (obj !== null) {
+                settingsWinInstance = obj
+                // Gebruik de veilige manier van verbinden
+                settingsWinInstance.destroyed.connect(function() {
+                    settingsWinInstance = null
+                })
+            } else {
+                // DIT IS BELANGRIJK: Dit vertelt ons waarom createObject faalt
+                console.error("Fout: SettingsMenu kon niet worden aangemaakt. Error:", component.errorString())
+            }
+        } else if (component.status === Component.Error) {
+            console.error("Fout bij laden SettingsMenu component:", component.errorString())
+        }
     }
 
     function getSetting(key, defaultValue) {

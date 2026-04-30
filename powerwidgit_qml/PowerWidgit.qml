@@ -10,7 +10,7 @@ PopupWindow {
 
     property int minuten: 5
 
-    implicitHeight: 345
+    implicitHeight: ((Style.barHoogte * 8) + (Style.uiMarginsM * 10) + (Style.fontGrootteL + 4))
     implicitWidth: 200
 
     anchor {
@@ -93,7 +93,37 @@ PopupWindow {
 
         border {
             color: Style.borderKleur
-            width: Style.borderSize
+            width: Style.barBorderSize
+        }
+
+        SettingsButtonElement {
+            id: settingsW
+
+            anchors {
+                top:   parent.top
+                left:  parent.left
+                right: parent.right
+
+                topMargin:   Style.uiMarginsM
+                leftMargin:  Style.uiMarginsM
+                rightMargin: Style.uiMarginsM
+            }
+
+            border {
+                color: Style.borderKleur
+                width: Style.borderSize
+            }
+
+            radius: Style.radiusGrooteM
+            height: Style.barHoogte
+            color:  "transparent"
+
+            Text {
+                anchors.centerIn: parent
+                text:  "Settings"
+                color: Style.textKleur
+                font { pixelSize: 18; bold: true }
+            }
         }
 
         // --- select your power profilles ---
@@ -113,7 +143,7 @@ PopupWindow {
             radius: Style.radiusGrooteM
 
             anchors {
-                top:   parent.top
+                top:   settingsW.bottom
                 left:  parent.left
                 right: parent.right
 
@@ -154,7 +184,7 @@ PopupWindow {
                     text: powerProfilleSlector.huidigProfiel !== ""
                           ? powerProfilleSlector.huidigProfiel
                           : "laden…"
-                    color: Style.textKleur2
+                    color: Style.textKleur
                     font {
                         pixelSize: 18
                         bold:      true
@@ -164,7 +194,7 @@ PopupWindow {
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
                     text:  "▾"
-                    color: Style.textKleur2
+                    color: Style.textKleur
                     font.pixelSize: 14
                 }
             }
@@ -221,7 +251,7 @@ PopupWindow {
                 Text {
                     anchors.centerIn: parent
                     text:  "-"
-                    color: Style.textKleur2
+                    color: Style.textKleur
                     font { pixelSize: 18; bold: true }
                 }
 
@@ -271,7 +301,7 @@ PopupWindow {
                     width: parent.width - 8
 
                     text:  powermaneger.minuten.toString()
-                    color: Style.textKleur2
+                    color: Style.textKleur
                     font { pixelSize: 18; bold: true }
 
                     horizontalAlignment: TextInput.AlignHCenter
@@ -327,7 +357,7 @@ PopupWindow {
                 Text {
                     anchors.centerIn: parent
                     text:  "+"
-                    color: Style.textKleur2
+                    color: Style.textKleur
                     font { pixelSize: 18; bold: true }
                 }
 
@@ -378,7 +408,7 @@ PopupWindow {
             Text {
                 anchors.centerIn: parent
                 text:  "Shut Down in "
-                color: Style.textKleur2
+                color: Style.textKleur
                 font { pixelSize: 18; bold: true }
             }
 
@@ -418,7 +448,7 @@ PopupWindow {
                 Text {
                     anchors.centerIn: parent
                     text:  "Sleep"
-                    color: Style.textKleur2
+                    color: Style.textKleur
                     font { pixelSize: 18; bold: true }
                 }
 
@@ -442,7 +472,7 @@ PopupWindow {
                 Text {
                     anchors.centerIn: parent
                     text:  "Log Out"
-                    color: Style.textKleur2
+                    color: Style.textKleur
                     font { pixelSize: 18; bold: true }
                 }
 
@@ -513,7 +543,7 @@ PopupWindow {
                     text:  saveStateSelector.geselecteerdBestand !== ""
                            ? saveStateSelector.geselecteerdBestand
                            : "Kies save state…"
-                    color: Style.textKleur2
+                    color: Style.textKleur
                     font { pixelSize: 18; bold: true }
                     elide:            Text.ElideRight
                     maximumLineCount: 1
@@ -522,7 +552,7 @@ PopupWindow {
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
                     text:  "▾"
-                    color: Style.textKleur2
+                    color: Style.textKleur
                     font.pixelSize: 14
                 }
             }
@@ -568,7 +598,7 @@ PopupWindow {
                 Text {
                     anchors.centerIn: parent
                     text:  "Save"
-                    color: Style.textKleur2
+                    color: Style.textKleur
                     font { pixelSize: 18; bold: true }
                 }
 
@@ -592,7 +622,7 @@ PopupWindow {
                 Text {
                     anchors.centerIn: parent
                     text:  "Load"
-                    color: Style.textKleur2
+                    color: Style.textKleur
                     font { pixelSize: 18; bold: true }
                 }
 
@@ -625,7 +655,7 @@ PopupWindow {
             Text {
                 anchors.centerIn: parent
                 text:  "Shut Down"
-                color: Style.textKleur2
+                color: Style.textKleur
                 font { pixelSize: 18; bold: true }
             }
 
@@ -641,7 +671,7 @@ PopupWindow {
         Text {
             id: saveStatDir
             text:  "save state"
-            color: Style.textKleur2
+            color: Style.textKleur
             font.pixelSize: Style.fontGrootteL
             anchors {
                 top:  shutdown.bottom
@@ -659,7 +689,7 @@ PopupWindow {
         Text {
             id: qmlConfig
             text:  "qml"
-            color: Style.textKleur2
+            color: Style.textKleur
             font.pixelSize: Style.fontGrootteL
             anchors {
                 top:   shutdown.bottom
@@ -729,7 +759,7 @@ PopupWindow {
                         radius: Style.radiusGrooteM
                         border {
                             color: modelData === powerProfilleSlector.huidigProfiel
-                                   ? Style.textKleur2
+                                   ? Style.textKleur
                                    : Style.borderKleur
                             width: Style.borderSize
                         }
@@ -737,7 +767,7 @@ PopupWindow {
                         Text {
                             anchors.centerIn: parent
                             text:  modelData
-                            color: Style.textKleur2
+                            color: Style.textKleur
                             font {
                                 pixelSize: 18
                                 bold: modelData === powerProfilleSlector.huidigProfiel
@@ -783,7 +813,7 @@ PopupWindow {
                 anchors.centerIn: parent
                 visible:   bestandenModel.count === 0
                 text:      "Geen bestanden"
-                color:     Style.textKleur2
+                color:     Style.textKleur
                 font { pixelSize: 16; bold: false }
             }
 
@@ -809,7 +839,7 @@ PopupWindow {
                     radius: Style.radiusGrooteM
                     border {
                         color: model.bestandNaam === saveStateSelector.geselecteerdBestand
-                               ? Style.textKleur2
+                               ? Style.textKleur
                                : Style.borderKleur
                         width: Style.borderSize
                     }
@@ -817,7 +847,7 @@ PopupWindow {
                     Text {
                         anchors.centerIn: parent
                         text:  model.bestandNaam
-                        color: Style.textKleur2
+                        color: Style.textKleur
                         font {
                             pixelSize: 18
                             bold: model.bestandNaam === saveStateSelector.geselecteerdBestand
