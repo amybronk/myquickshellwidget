@@ -2,70 +2,132 @@ pragma Singleton
 import QtCore
 import QtQuick
 
-// you can find the list of Favorited apps in Favorites.qml at ~/.config/quickshell/AppPallet_qml/Favorites.qml
-
-// A path to all filles with short explanations for what thay do can be found at ~/.config/quickshell/notes/dir.md
-
 Item {
-    // Kleuren
-    readonly property color achtergrondKleur: '#d31f1f1f'
-    readonly property color popupAchtergrondKleur: '#eb2b2b2b'
-    readonly property color borderKleur: '#daaa00a4'
-    readonly property color accentKleur: '#520050'
+    id: root
 
-    readonly property color textKleur: '#ffffffff'
-    readonly property color textKleur2:'#aa00a4'
-    readonly property color negatiefTextKleur: '#ff000000'
+    readonly property string rootConfigDir: StandardPaths.standardLocations(StandardPaths.HomeLocation)[0].toString().replace("file://", "") + "/.config/quickshell/"
 
-    readonly property color actiefWerkbaldKleur: '#ff0000'
-    readonly property color volleWerkbaldKleur: '#3d0000'
-    readonly property color legeWerkbaldKleur: '#ffffff'
+    Settings {
+        id: styleSettings
+        category: "Theme"
+        // ~/.config/UserConfig/Quickshell.conf
+    }
 
-    readonly property color colourRed: '#ff0000'
-    readonly property color colourBlue: '#0000ff'
-    readonly property color colourGreen: '#00ff00'
-    readonly property color colourPink: '#ff00d0'
+    property var settingsWinInstance: null
 
-    
-    // Afmetingen
-    readonly property int barHoogte: 35
-    readonly property int barbuttonlengt: 60
-    readonly property int barBorderSize: 0
-    readonly property int borderSize: 2
-    readonly property int topBarMargins: 2
-    readonly property int bottomBarMargins: 4
+    function openSettings() {
+        if (settingsWinInstance !== null && typeof settingsWinInstance !== "undefined" && settingsWinInstance.toString() !== "null") {
+            try {
+                settingsWinInstance.raise()
+                settingsWinInstance.requestActivate()
+                return
+            } catch (e) {
+                settingsWinInstance = null
+            }
+        }
 
-    readonly property int uiMarginsS: 2
-    readonly property int uiMarginsM: 5
-    readonly property int uiMarginsL: 10
-    readonly property int uiMarginsG: 15
+        let component = Qt.createComponent(Qt.resolvedUrl("Settings_qml/SettingsMenu.qml"))
+        
+        if (component.status === Component.Ready) {
+            let obj = component.createObject(null)
+            
+            if (obj !== null) {
+                settingsWinInstance = obj
+                settingsWinInstance.destroyed.connect(function() {
+                    settingsWinInstance = null
+                })
+            } else {
+                console.error("Fout: SettingsMenu kon niet worden aangemaakt. Error:", component.errorString())
+            }
+        } else if (component.status === Component.Error) {
+            console.error("Fout bij laden SettingsMenu component:", component.errorString())
+        }
+    }
 
-    readonly property int fontGrootteS: 8
-    readonly property int fontGrootteM: 10
-    readonly property int fontGrootteL: 14
-    readonly property int fontGrootteG: 22
-    readonly property int fontKlokgrote: ((barHoogte - (topBarMargins + bottomBarMargins)) / 2)
+    function getSetting(key, defaultValue) {
+        return styleSettings.value(key, defaultValue)
+    }
 
-    //readonly property int iconGrooteS: 12
-    readonly property int iconGrooteM: 18
-    //readonly property int iconGrooteL: 22
+    function setSetting(key, value) {
+        root[key] = value
+        styleSettings.setValue(key, value)
+    }
 
-    readonly property int radiusGrooteS: 4
-    readonly property int radiusGrooteM: 10
-    //readonly property int radiusGrooteL: 14
-    readonly property int exitTimer: 350
+    // --- COLOUR ---
+    property color achtergrondKleur: getSetting("achtergrondKleur", '#d31f1f1f')
+    property color popupAchtergrondKleur: getSetting("popupAchtergrondKleur", '#eb2b2b2b')
+    property color borderKleur: getSetting("borderKleur", '#daaa00a4')
+    property color accentKleur: getSetting("accentKleur", '#520050')
 
-    readonly property int fastRepeatTimer: 500
-    readonly property int slowRepeatTimer: 2000
+    property color textKleur: getSetting("textKleur", '#ffffffff')
+    property color textColourLink: getSetting("textColourLink", '#ff00d0')
+    property color negatiefTextKleur: getSetting("negatiefTextKleur", '#ff000000')
 
-    readonly property int sliderThickness: 8
+    property color actiefWerkbaldKleur: getSetting("actiefWerkbaldKleur", '#ff0000')
+    property color volleWerkbaldKleur: getSetting("volleWerkbaldKleur", '#3d0000')
+    property color legeWerkbaldKleur: getSetting("legeWerkbaldKleur", '#ffffff')
 
-    readonly property int appletAppAmount: 2
-    readonly property int appletDrawrAmount: 2
+    property color colourPowerButton: getSetting("colourPowerButton", '#ff6cf5')
+    property color colourAppPalet: getSetting("colourAppPalet", '#70e2ff')
+    property color colourSettingsButton: getSetting("colourSettingsButton", '#6cff67')
 
+    // --- INT ---
+    property int barHoogte: getSetting("barHoogte", 35)
+    property int barbuttonlengt: getSetting("barbuttonlengt", 60)
+    property int mediaBorderSize: getSetting("mediaBorderSize", 0)
+    property int barBorderSize: getSetting("barBorderSize", 0)
+    property int borderSize: getSetting("borderSize", 2)
+    property int topBarMargins: getSetting("topBarMargins", 2)
+    property int bottomBarMargins: getSetting("bottomBarMargins", 4)
+
+    property int uiMarginsS: getSetting("uiMarginsS", 2)
+    property int uiMarginsM: getSetting("uiMarginsM", 5)
+    property int uiMarginsL: getSetting("uiMarginsL", 10)
+    property int uiMarginsG: getSetting("uiMarginsG", 15)
+
+    property int fontGrootteS: getSetting("fontGrootteS", 8)
+    property int fontGrootteM: getSetting("fontGrootteM", 10)
+    property int fontGrootteL: getSetting("fontGrootteL", 14)
+    property int fontGrootteG: getSetting("fontGrootteG", 22)
+    property int fontKlokgrote: getSetting("fontKlokgrote", ((barHoogte - (topBarMargins + bottomBarMargins)) / 2))
+
+    property int iconGrooteS: getSetting("iconGrooteS", 12)
+    property int iconGrooteM: getSetting("iconGrooteM", 18)
+    property int iconGrooteL: getSetting("iconGrooteL", 22)
+
+    property int radiusGrooteS: getSetting("radiusGrooteS", 4)
+    property int radiusGrooteM: getSetting("radiusGrooteM", 10)
+    property int radiusGrooteL: getSetting("radiusGrooteL", 14)
+    property int exitTimer: getSetting("exitTimer", 350)
+
+    property int fastRepeatTimer: getSetting("fastRepeatTimer", 500)
+    property int slowRepeatTimer: getSetting("slowRepeatTimer", 2000)
+
+    property int mediaWidth: getSetting("mediaWidth", 340)
+
+    property int sliderThickness: getSetting("sliderThickness", 8)
+
+    property int appletAppAmount: getSetting("appletAppAmount", 2)
+    property int appletDrawrAmount: getSetting("appletDrawrAmount", 2)
+
+    property string globalFontFamily: getSetting("globalFontFamily", "Hack")
+
+    // --- directorys ---
     readonly property string saveState: "$HOME/.config/quickshell/SaveStates_txt/"
     readonly property string quickshellDir: "$HOME/.config/quickshell/"
     readonly property string saveStatDir: "$HOME/.config/quickshell/SaveStates_txt/"
-    readonly property string rootConfigDir: StandardPaths.standardLocations(
-        StandardPaths.HomeLocation)[0].toString().replace("file://", "") + "/.config/quickshell/"
-}
+
+    readonly property var editableKeys: [
+        // --- COLOUR ---
+        "achtergrondKleur", "popupAchtergrondKleur", "borderKleur", "accentKleur", "textKleur", "textColourLink", 
+        "negatiefTextKleur", "actiefWerkbaldKleur", "volleWerkbaldKleur", "legeWerkbaldKleur", 
+        "colourPowerButton", "colourAppPalet", "colourSettingsButton", 
+
+        // --- INT ---
+        "barHoogte", "barbuttonlengt", "barBorderSize", "borderSize","topBarMargins", "bottomBarMargins", 
+        "uiMarginsS", "uiMarginsM", "uiMarginsL", "uiMarginsG", "fontGrootteS", "fontGrootteM", "fontGrootteL", 
+        "fontGrootteG", "iconGrooteS", "iconGrooteM", "iconGrooteL", "radiusGrooteS", "radiusGrooteM", 
+        "radiusGrooteL", "exitTimer", "fastRepeatTimer", "slowRepeatTimer", "sliderThickness", "appletAppAmount", 
+        "appletDrawrAmount"
+    ]
+} 

@@ -18,19 +18,20 @@ Rectangle {
 	Text {
 		anchors {
 			centerIn: parent
-			verticalCenterOffset: -apppallet.height * 0.06
-			horizontalCenterOffset: -apppallet.width * 0.02
+			verticalCenterOffset: -apppallet.height * 0.03
+			horizontalCenterOffset: -apppallet.width * 0.01
 		}
 
 		horizontalAlignment: Text.AlignHCenter
 		verticalAlignment: Text.AlignVCenter
 
 		text: "⌂"
-		color: Style.colourPink
+		color: Style.colourAppPalet
 
-
-		font{ 
-			pixelSize: apppallet.height * 0.85
+		font {
+        	family: Style.globalFontFamily
+			pixelSize: apppallet.height * 0.9
+			bold: true
 		}
 	}
 

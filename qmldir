@@ -56,3 +56,8 @@ AppPalletButton 1.0 AppPallet_qml/AppPalletButton.qml
 PowerWidgit 1.0 powerwidgit_qml/PowerWidgit.qml
 PowerOffConformation 1.0 powerwidgit_qml/PowerOffConformation.qml
 PowerButtonElement 1.0 powerwidgit_qml/PowerButtonElement.qml
+
+# Settings Menu
+# ~/.config/quickshell/Settings_qml/
+SettingsMenu 1.0 Settings_qml/SettingsMenu.qml
+SettingsButtonElement 1.0 Settings_qml/SettingsButtonElement.qml

@@ -49,6 +49,7 @@ mkdir -p "$CONFIG_DIR/Klok_qml"
 mkdir -p "$CONFIG_DIR/Ui_elements_qml"
 mkdir -p "$CONFIG_DIR/AppPallet_qml"
 mkdir -p "$CONFIG_DIR/powerwidgit_qml"
+mkdir -p "$CONFIG_DIR/Settings_qml"
 mkdir -p "$CONFIG_DIR/scripts"
 mkdir -p "$CONFIG_DIR/SaveStates_txt"
 

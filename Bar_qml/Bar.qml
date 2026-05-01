@@ -18,6 +18,7 @@ PanelWindow {
 
 	property alias powermanegerX: powermanegerwindow.x
 	property alias powermanegerWidth: powermanegerwindow.width
+
 	
 	anchors {
 		top: true
@@ -29,8 +30,8 @@ PanelWindow {
 	visible: true 
 	color: '#00000000'
 
-	AppPalletButton {
-		id: apppalletButton
+	PowerButtonElement {
+		id: powermanegerwindow
 
 		anchors {
 			top: parent.top
@@ -38,9 +39,59 @@ PanelWindow {
 			bottom: parent.bottom
 
 			topMargin: Style.topBarMargins
-			leftMargin: 5
-			rightMargin: 5
+			leftMargin: Style.uiMarginsM
 			bottomMargin: Style.bottomBarMargins
+		}
+		
+	}
+
+	AppPalletButton {
+		id: apppalletButton
+
+		anchors {
+			top: parent.top
+			left: powermanegerwindow.right
+			bottom: parent.bottom
+
+			topMargin: Style.topBarMargins
+			leftMargin: Style.uiMarginsM
+			rightMargin: Style.uiMarginsM
+			bottomMargin: Style.bottomBarMargins
+		}
+	}
+
+	SettingsButtonElement {
+		id: settingsB
+
+		anchors {
+			top: parent.top
+			left: apppalletButton.right
+			bottom: parent.bottom
+			
+			topMargin: Style.topBarMargins
+			leftMargin: Style.uiMarginsM
+			rightMargin: Style.uiMarginsS
+			bottomMargin: Style.bottomBarMargins
+		}
+
+		border {
+			color: Style.borderKleur
+			width: Style.barBorderSize
+		}
+
+		radius: Style.radiusGrooteM
+		width: Style.barHoogte
+		color: Style.achtergrondKleur
+
+		Text {
+			anchors.centerIn: parent
+			text: "⚙"
+			color: Style.colourSettingsButton
+			font {
+        		family: Style.globalFontFamily 
+				pixelSize: parent.height * 0.9
+				bold: true 
+			}
 		}
 	}
 
@@ -49,21 +100,7 @@ PanelWindow {
 
 		anchors {
 			top: parent.top
-			left: apppalletButton.right
-			bottom: parent.bottom
-
-			topMargin: Style.topBarMargins
-			leftMargin: Style.uiMarginsG
-			bottomMargin: Style.bottomBarMargins
-		}
-	}
-
-	PowerButtonElement {
-		id: powermanegerwindow
-
-		anchors {
-			top: parent.top
-			left: musicButton.right
+			left: settingsB.right
 			bottom: parent.bottom
 
 			topMargin: Style.topBarMargins

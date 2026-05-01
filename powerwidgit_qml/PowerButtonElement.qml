@@ -7,7 +7,7 @@ Rectangle {
 
     visible: true
 	radius: Style.radiusGrooteM
-	width: Style.barbuttonlengt
+	width: Style.barHoogte
 	color: Style.achtergrondKleur
 
 	border {
@@ -18,19 +18,21 @@ Rectangle {
 	Text {
 		anchors {
 			centerIn: parent
-			verticalCenterOffset: -powerButton.height * 0.00
-			horizontalCenterOffset: -powerButton.width * 0.02
+			verticalCenterOffset: -powerButton.height * -0.04
+			horizontalCenterOffset: -powerButton.width * 0.01
 		}
 
 		horizontalAlignment: Text.AlignHCenter
 		verticalAlignment: Text.AlignVCenter
 
 		text: "⏻"
-		color: Style.colourPink
+		color: Style.colourPowerButton
 
 
-		font{ 
-			pixelSize: powerButton.height * 0.85
+		font{
+        	family: Style.globalFontFamily 
+			pixelSize: powerButton.height * 0.99
+			bold: true
 		}
 	}
 
