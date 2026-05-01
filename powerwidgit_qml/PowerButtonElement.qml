@@ -18,8 +18,8 @@ Rectangle {
 	Text {
 		anchors {
 			centerIn: parent
-			verticalCenterOffset: -powerButton.height * 0.00
-			horizontalCenterOffset: -powerButton.width * 0.02
+			verticalCenterOffset: -powerButton.height * -0.04
+			horizontalCenterOffset: -powerButton.width * 0.01
 		}
 
 		horizontalAlignment: Text.AlignHCenter
@@ -29,8 +29,10 @@ Rectangle {
 		color: Style.colourPowerButton
 
 
-		font{ 
-			pixelSize: powerButton.height * 0.85
+		font{
+        	family: Style.globalFontFamily 
+			pixelSize: powerButton.height * 0.99
+			bold: true
 		}
 	}
 

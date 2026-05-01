@@ -15,6 +15,7 @@ PopupWindow {
 
     anchor {
         window: barWindow
+
         rect: Qt.rect(
             barWindow.powermanegerX + barWindow.powermanegerWidth / 2 - implicitWidth / 2,
             barWindow.height,
@@ -26,10 +27,13 @@ PopupWindow {
     // --- mouse detection ---
     HoverHandler {
         id: popupHover
+
         onHoveredChanged: {
+
             if (hovered) {
                 closeTimer.stop()
-            } else {
+            } 
+            else {
                 closeTimer.start()
             }
         }
@@ -122,7 +126,12 @@ PopupWindow {
                 anchors.centerIn: parent
                 text:  "Settings"
                 color: Style.textKleur
-                font { pixelSize: 18; bold: true }
+
+                font {
+                    family: Style.globalFontFamily 
+                    pixelSize: 18
+                    bold: true 
+                }
             }
         }
 
@@ -157,6 +166,7 @@ PopupWindow {
                 id: getProfielProc
                 command: ["powerprofilesctl", "get"]
                 running: true
+
                 stdout: SplitParser {
                     onRead: data => {
                         const t = data.trim()
@@ -170,6 +180,7 @@ PopupWindow {
                 id: setProfielProc
                 property string doel: ""
                 command: ["powerprofilesctl", "set", doel]
+
                 onExited: (code, _) => {
                     if (code === 0) powerProfilleSlector.huidigProfiel = doel
                 }
@@ -185,7 +196,9 @@ PopupWindow {
                           ? powerProfilleSlector.huidigProfiel
                           : "laden…"
                     color: Style.textKleur
+
                     font {
+                        family: Style.globalFontFamily
                         pixelSize: 18
                         bold:      true
                     }
@@ -195,13 +208,17 @@ PopupWindow {
                     anchors.verticalCenter: parent.verticalCenter
                     text:  "▾"
                     color: Style.textKleur
-                    font.pixelSize: 14
+                    font {
+                        family: Style.globalFontFamily
+                        pixelSize: 14
+                    }
                 }
             }
 
             MouseArea {
                 anchors.fill: parent
                 cursorShape:  Qt.PointingHandCursor
+
                 onClicked: {
                     // sluit de andere dropdown als die open is
                     bestandDropdown.visible = false
@@ -252,17 +269,23 @@ PopupWindow {
                     anchors.centerIn: parent
                     text:  "-"
                     color: Style.textKleur
-                    font { pixelSize: 18; bold: true }
+
+                    font {
+                        family: Style.globalFontFamily 
+                        pixelSize: 18
+                        bold: true 
+                    }
                 }
 
                 MouseArea {
                     anchors.fill: parent
                     cursorShape:  Qt.PointingHandCursor
-                    // ingedrukt houden telt sneller af
+                    
                     onClicked: {
                         if (powermaneger.minuten > 1)
                             powermaneger.minuten -= 1
                     }
+
                     onPressAndHold: herhaalTimer.start()
                     onReleased:     herhaalTimer.stop()
 
@@ -270,6 +293,7 @@ PopupWindow {
                         id: herhaalTimer
                         interval: 80
                         repeat:   true
+
                         onTriggered: {
                             if (powermaneger.minuten > 1)
                                 powermaneger.minuten -= 1
@@ -285,7 +309,11 @@ PopupWindow {
                 id: minetAmount
 
                 color:  "transparent"
-                border { color: Style.borderKleur; width: Style.borderSize }
+
+                border { 
+                    color: Style.borderKleur
+                    width: Style.borderSize 
+                }
 
                 anchors {
                     top:    parent.top
@@ -302,30 +330,31 @@ PopupWindow {
 
                     text:  powermaneger.minuten.toString()
                     color: Style.textKleur
-                    font { pixelSize: 18; bold: true }
+
+                    font {
+                        family: Style.globalFontFamily 
+                        pixelSize: 18
+                        bold: true 
+                    }
 
                     horizontalAlignment: TextInput.AlignHCenter
                     selectByMouse:       true
                     cursorVisible:       activeFocus
 
-                    // alleen cijfers 1–999
                     validator: IntValidator { bottom: 1; top: 999 }
 
-                    // pas de property aan zodra de tekst verandert
                     onTextChanged: {
                         const v = parseInt(text)
                         if (!isNaN(v) && v >= 1)
                             powermaneger.minuten = v
                     }
 
-                    // herstel naar huidige waarde als het veld leeg of ongeldig is
                     onEditingFinished: {
                         const v = parseInt(text)
                         if (isNaN(v) || v < 1)
                             text = powermaneger.minuten.toString()
                     }
 
-                    // houd het invoerveld synchroon met de knoppen
                     Binding {
                         target:   minutenInput
                         property: "text"
@@ -358,16 +387,23 @@ PopupWindow {
                     anchors.centerIn: parent
                     text:  "+"
                     color: Style.textKleur
-                    font { pixelSize: 18; bold: true }
+
+                    font {
+                        family: Style.globalFontFamily 
+                        pixelSize: 18
+                        bold: true 
+                    }
                 }
 
                 MouseArea {
                     anchors.fill: parent
                     cursorShape:  Qt.PointingHandCursor
+
                     onClicked: {
                         if (powermaneger.minuten < 999)
                             powermaneger.minuten += 1
                     }
+
                     onPressAndHold: herhaalTimerPlus.start()
                     onReleased:     herhaalTimerPlus.stop()
 
@@ -375,6 +411,7 @@ PopupWindow {
                         id: herhaalTimerPlus
                         interval: 80
                         repeat:   true
+
                         onTriggered: {
                             if (powermaneger.minuten < 999)
                                 powermaneger.minuten += 1
@@ -391,25 +428,35 @@ PopupWindow {
         Rectangle {
             id: powerDouwnTimerStart
 
-            border { color: Style.borderKleur; width: Style.borderSize }
-            height: Style.barHoogte
-            color:  "transparent"
-            radius: Style.radiusGrooteM
-
             anchors {
                 top: timeLengtSelector.bottom
                 left: parent.left
                 right: parent.right
+
                 topMargin:   Style.uiMarginsM
                 leftMargin:  Style.uiMarginsM
                 rightMargin: Style.uiMarginsM
             }
 
+            border { 
+                color: Style.borderKleur
+                width: Style.borderSize 
+            }
+
+            height: Style.barHoogte
+            color:  "transparent"
+            radius: Style.radiusGrooteM
+
             Text {
                 anchors.centerIn: parent
                 text:  "Shut Down in "
                 color: Style.textKleur
-                font { pixelSize: 18; bold: true }
+
+                font {
+                    family: Style.globalFontFamily 
+                    pixelSize: 18
+                    bold: true 
+                }
             }
 
             MouseArea {
@@ -430,6 +477,7 @@ PopupWindow {
                 top: powerDouwnTimerStart.bottom
                 left: parent.left
                 right: parent.right
+
                 topMargin:   Style.uiMarginsM
                 leftMargin:  Style.uiMarginsM
                 rightMargin: Style.uiMarginsM
@@ -441,15 +489,28 @@ PopupWindow {
                 width:  (rootui.width - (Style.uiMarginsM * 3)) / 2
                 color:  "transparent"
                 radius: Style.radiusGrooteM
-                border { color: Style.borderKleur; width: Style.borderSize }
 
-                anchors { top: parent.top; bottom: parent.bottom; left: parent.left }
+                border { 
+                    color: Style.borderKleur
+                    width: Style.borderSize 
+                }
+
+                anchors { 
+                    top: parent.top
+                    bottom: parent.bottom
+                    left: parent.left
+                }
 
                 Text {
                     anchors.centerIn: parent
                     text:  "Sleep"
                     color: Style.textKleur
-                    font { pixelSize: 18; bold: true }
+
+                    font {
+                        family: Style.globalFontFamily 
+                        pixelSize: 18
+                        bold: true 
+                    }
                 }
 
                 MouseArea {
@@ -465,15 +526,26 @@ PopupWindow {
                 width:  (rootui.width - (Style.uiMarginsM * 3)) / 2
                 color:  "transparent"
                 radius: Style.radiusGrooteM
-                border { color: Style.borderKleur; width: Style.borderSize }
+                border { 
+                    color: Style.borderKleur
+                    width: Style.borderSize 
+                }
 
-                anchors { top: parent.top; bottom: parent.bottom; right: parent.right }
+                anchors { 
+                    top: parent.top
+                    bottom: parent.bottom
+                    right: parent.right 
+                }
 
                 Text {
                     anchors.centerIn: parent
                     text:  "Log Out"
                     color: Style.textKleur
-                    font { pixelSize: 18; bold: true }
+                    font {
+                        family: Style.globalFontFamily 
+                        pixelSize: 18
+                        bold: true 
+                    }
                 }
 
                 MouseArea {
@@ -497,7 +569,11 @@ PopupWindow {
 
             signal bestandGekozen(string pad)
 
-            border { color: Style.borderKleur; width: Style.borderSize }
+            border { 
+                color: Style.borderKleur
+                width: Style.borderSize 
+            }
+
             height: Style.barHoogte
             color:  "transparent"
             radius: Style.radiusGrooteM
@@ -506,6 +582,7 @@ PopupWindow {
                 top:   sleepLogOut.bottom
                 left:  parent.left
                 right: parent.right
+
                 topMargin:   Style.uiMarginsM
                 leftMargin:  Style.uiMarginsM
                 rightMargin: Style.uiMarginsM
@@ -540,12 +617,19 @@ PopupWindow {
 
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
+
                     text:  saveStateSelector.geselecteerdBestand !== ""
                            ? saveStateSelector.geselecteerdBestand
                            : "Kies save state…"
+
                     color: Style.textKleur
-                    font { pixelSize: 18; bold: true }
-                    elide:            Text.ElideRight
+                    font {
+                        family: Style.globalFontFamily 
+                        pixelSize: 18
+                        bold: true 
+                    }
+
+                    elide: Text.ElideRight
                     maximumLineCount: 1
                 }
 
@@ -580,6 +664,7 @@ PopupWindow {
                 top: saveStateSelector.bottom
                 left: parent.left
                 right: parent.right
+
                 topMargin:   Style.uiMarginsM
                 leftMargin:  Style.uiMarginsM
                 rightMargin: Style.uiMarginsM
@@ -591,7 +676,11 @@ PopupWindow {
                 width:  (rootui.width - (Style.uiMarginsM * 3)) / 2
                 color:  "transparent"
                 radius: Style.radiusGrooteM
-                border { color: Style.borderKleur; width: Style.borderSize }
+
+                border { 
+                    color: Style.borderKleur
+                    width: Style.borderSize 
+                }
 
                 anchors { top: parent.top; bottom: parent.bottom; left: parent.left }
 
@@ -599,7 +688,11 @@ PopupWindow {
                     anchors.centerIn: parent
                     text:  "Save"
                     color: Style.textKleur
-                    font { pixelSize: 18; bold: true }
+                    font {
+                        family: Style.globalFontFamily 
+                        pixelSize: 18
+                        bold: true 
+                    }
                 }
 
                 MouseArea {
@@ -615,15 +708,28 @@ PopupWindow {
                 width:  (rootui.width - (Style.uiMarginsM * 3)) / 2
                 color:  "transparent"
                 radius: Style.radiusGrooteM
-                border { color: Style.borderKleur; width: Style.borderSize }
 
-                anchors { top: parent.top; bottom: parent.bottom; right: parent.right }
+                border { 
+                    color: Style.borderKleur
+                    width: Style.borderSize 
+                }
+
+                anchors { 
+                    top: parent.top
+                    bottom: parent.bottom
+                    right: parent.right 
+                }
 
                 Text {
                     anchors.centerIn: parent
                     text:  "Load"
                     color: Style.textKleur
-                    font { pixelSize: 18; bold: true }
+
+                    font {
+                        family: Style.globalFontFamily 
+                        pixelSize: 18
+                        bold: true 
+                    }
                 }
 
                 MouseArea {
@@ -638,7 +744,11 @@ PopupWindow {
         Rectangle {
             id: shutdown
 
-            border { color: Style.borderKleur; width: Style.borderSize }
+            border { 
+                color: Style.borderKleur
+                width: Style.borderSize 
+            }
+
             height: Style.barHoogte
             color:  "transparent"
             radius: Style.radiusGrooteM
@@ -647,6 +757,7 @@ PopupWindow {
                 top: saveLoadSaveState.bottom
                 left: parent.left
                 right: parent.right
+
                 topMargin:   Style.uiMarginsM
                 leftMargin:  Style.uiMarginsM
                 rightMargin: Style.uiMarginsM
@@ -656,7 +767,11 @@ PopupWindow {
                 anchors.centerIn: parent
                 text:  "Shut Down"
                 color: Style.textKleur
-                font { pixelSize: 18; bold: true }
+                font {
+                    family: Style.globalFontFamily 
+                    pixelSize: 18
+                    bold: true 
+                }
             }
 
             MouseArea {
@@ -672,13 +787,20 @@ PopupWindow {
             id: saveStatDir
             text:  "save state"
             color: Style.textKleur
-            font.pixelSize: Style.fontGrootteL
+
+            font {
+                family: Style.globalFontFamily 
+                pixelSize: Style.fontGrootteL
+            }
+
             anchors {
                 top:  shutdown.bottom
                 left: parent.left
+
                 topMargin:  Style.uiMarginsM
                 leftMargin: Style.uiMarginsL
             }
+
             MouseArea {
                 anchors.fill: parent
                 cursorShape:  Qt.PointingHandCursor
@@ -690,10 +812,16 @@ PopupWindow {
             id: qmlConfig
             text:  "qml"
             color: Style.textKleur
-            font.pixelSize: Style.fontGrootteL
+
+            font {
+                family: Style.globalFontFamily 
+                pixelSize: Style.fontGrootteL
+            }
+
             anchors {
                 top:   shutdown.bottom
                 right: parent.right
+
                 topMargin:   Style.uiMarginsM
                 rightMargin: Style.uiMarginsL
             }
@@ -736,17 +864,23 @@ PopupWindow {
 
             color:  Style.popupAchtergrondKleur
             radius: Style.radiusGrooteM
-            border { color: Style.borderKleur; width: Style.borderSize }
+
+            border { 
+                color: Style.borderKleur
+                width: Style.borderSize 
+            }
 
             Column {
                 anchors {
                     top:   parent.top
                     left:  parent.left
                     right: parent.right
+
                     topMargin:   Style.uiMarginsM
                     leftMargin:  Style.uiMarginsM
                     rightMargin: Style.uiMarginsM
                 }
+
                 spacing: Style.uiMarginsM / 2
 
                 Repeater {
@@ -757,6 +891,7 @@ PopupWindow {
                         height: Style.barHoogte
                         color:  "transparent"
                         radius: Style.radiusGrooteM
+
                         border {
                             color: modelData === powerProfilleSlector.huidigProfiel
                                    ? Style.textKleur
@@ -768,7 +903,9 @@ PopupWindow {
                             anchors.centerIn: parent
                             text:  modelData
                             color: Style.textKleur
+
                             font {
+                                family: Style.globalFontFamily
                                 pixelSize: 18
                                 bold: modelData === powerProfilleSlector.huidigProfiel
                             }
@@ -777,6 +914,7 @@ PopupWindow {
                         MouseArea {
                             anchors.fill: parent
                             cursorShape:  Qt.PointingHandCursor
+
                             onClicked: {
                                 setProfielProc.doel    = modelData
                                 setProfielProc.running = true
@@ -797,7 +935,7 @@ PopupWindow {
             x:      Style.uiMarginsM
             y:      saveStateSelector.y + saveStateSelector.height + Style.uiMarginsM / 2
             width:  rootui.width - Style.uiMarginsM * 2
-            // maximaal 4 items zichtbaar, daarna scroll
+
             height: Math.min(
                         bestandenModel.count * (Style.barHoogte + Style.uiMarginsM / 2)
                         + Style.uiMarginsM * 2,
@@ -806,7 +944,11 @@ PopupWindow {
 
             color:  Style.popupAchtergrondKleur
             radius: Style.radiusGrooteM
-            border { color: Style.borderKleur; width: Style.borderSize }
+
+            border { 
+                color: Style.borderKleur
+                width: Style.borderSize 
+            }
 
             // lege staat
             Text {
@@ -814,7 +956,12 @@ PopupWindow {
                 visible:   bestandenModel.count === 0
                 text:      "Geen bestanden"
                 color:     Style.textKleur
-                font { pixelSize: 16; bold: false }
+
+                font {
+                    family: Style.globalFontFamily 
+                    pixelSize: 16
+                    bold: false 
+                }
             }
 
             ListView {
@@ -826,6 +973,7 @@ PopupWindow {
 
                 anchors {
                     fill:        parent
+
                     topMargin:   Style.uiMarginsM
                     bottomMargin: Style.uiMarginsM
                     leftMargin:  Style.uiMarginsM
@@ -837,6 +985,7 @@ PopupWindow {
                     height: Style.barHoogte
                     color:  "transparent"
                     radius: Style.radiusGrooteM
+
                     border {
                         color: model.bestandNaam === saveStateSelector.geselecteerdBestand
                                ? Style.textKleur
@@ -848,10 +997,13 @@ PopupWindow {
                         anchors.centerIn: parent
                         text:  model.bestandNaam
                         color: Style.textKleur
+
                         font {
+                            family: Style.globalFontFamily
                             pixelSize: 18
                             bold: model.bestandNaam === saveStateSelector.geselecteerdBestand
                         }
+
                         elide:            Text.ElideRight
                         maximumLineCount: 1
                     }
@@ -859,6 +1011,7 @@ PopupWindow {
                     MouseArea {
                         anchors.fill: parent
                         cursorShape:  Qt.PointingHandCursor
+
                         onClicked: {
                             saveStateSelector.geselecteerdBestand = model.bestandNaam
                             saveStateSelector.bestandGekozen(saveStateSelector.geselecteerdPad)

@@ -60,12 +60,47 @@ PanelWindow {
 		}
 	}
 
+	SettingsButtonElement {
+		id: settingsB
+
+		anchors {
+			top: parent.top
+			left: apppalletButton.right
+			bottom: parent.bottom
+			
+			topMargin: Style.topBarMargins
+			leftMargin: Style.uiMarginsM
+			rightMargin: Style.uiMarginsS
+			bottomMargin: Style.bottomBarMargins
+		}
+
+		border {
+			color: Style.borderKleur
+			width: Style.barBorderSize
+		}
+
+		radius: Style.radiusGrooteM
+		width: Style.barHoogte
+		color: Style.achtergrondKleur
+
+		Text {
+			anchors.centerIn: parent
+			text: "⚙"
+			color: Style.colourSettingsButton
+			font {
+        		family: Style.globalFontFamily 
+				pixelSize: parent.height * 0.9
+				bold: true 
+			}
+		}
+	}
+
 	MusicButtonElement {
 		id: musicButton
 
 		anchors {
 			top: parent.top
-			left: apppalletButton.right
+			left: settingsB.right
 			bottom: parent.bottom
 
 			topMargin: Style.topBarMargins
@@ -86,36 +121,6 @@ PanelWindow {
 			leftMargin: 5
 			rightMargin: 5
 			bottomMargin: Style.bottomBarMargins
-		}
-	}
-
-	SettingsButtonElement {
-		id: settingsB
-
-		anchors {
-			top: parent.top
-			right: cameraindication.left
-			bottom: parent.bottom
-			
-			topMargin: Style.topBarMargins
-			rightMargin: Style.uiMarginsS
-			bottomMargin: Style.bottomBarMargins
-		}
-
-		border {
-			color: Style.borderKleur
-			width: Style.barBorderSize
-		}
-
-		radius: Style.radiusGrooteM
-		width: Style.barbuttonlengt
-		color: Style.achtergrondKleur
-
-		Text {
-			anchors.centerIn: parent
-			text: "⚙"
-			color: Style.colourSettingsButton
-			font { pixelSize: parent.height * 0.7 }
 		}
 	}
 

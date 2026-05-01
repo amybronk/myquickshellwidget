@@ -16,19 +16,16 @@ Item {
     property var settingsWinInstance: null
 
     function openSettings() {
-        // 1. Check of hij al bestaat
         if (settingsWinInstance !== null && typeof settingsWinInstance !== "undefined" && settingsWinInstance.toString() !== "null") {
             try {
                 settingsWinInstance.raise()
                 settingsWinInstance.requestActivate()
-                return // Stop hier, we zijn klaar
+                return
             } catch (e) {
-                settingsWinInstance = null // Object was corrupt, reset en ga door naar aanmaken
+                settingsWinInstance = null
             }
         }
 
-        // 2. Probeer het component te laden
-        // Gebruik het volledige pad vanaf de root om fouten te voorkomen
         let component = Qt.createComponent(Qt.resolvedUrl("Settings_qml/SettingsMenu.qml"))
         
         if (component.status === Component.Ready) {
@@ -36,12 +33,10 @@ Item {
             
             if (obj !== null) {
                 settingsWinInstance = obj
-                // Gebruik de veilige manier van verbinden
                 settingsWinInstance.destroyed.connect(function() {
                     settingsWinInstance = null
                 })
             } else {
-                // DIT IS BELANGRIJK: Dit vertelt ons waarom createObject faalt
                 console.error("Fout: SettingsMenu kon niet worden aangemaakt. Error:", component.errorString())
             }
         } else if (component.status === Component.Error) {
@@ -72,15 +67,14 @@ Item {
     property color volleWerkbaldKleur: getSetting("volleWerkbaldKleur", '#3d0000')
     property color legeWerkbaldKleur: getSetting("legeWerkbaldKleur", '#ffffff')
 
-    property color colourPink: getSetting("colourPink", '#000000')
-
     property color colourPowerButton: getSetting("colourPowerButton", '#ff6cf5')
     property color colourAppPalet: getSetting("colourAppPalet", '#70e2ff')
-    property color colourSettingsButton: getSetting("colourSettingsButton", '#86ffef')
+    property color colourSettingsButton: getSetting("colourSettingsButton", '#6cff67')
 
     // --- INT ---
     property int barHoogte: getSetting("barHoogte", 35)
     property int barbuttonlengt: getSetting("barbuttonlengt", 60)
+    property int mediaBorderSize: getSetting("mediaBorderSize", 0)
     property int barBorderSize: getSetting("barBorderSize", 0)
     property int borderSize: getSetting("borderSize", 2)
     property int topBarMargins: getSetting("topBarMargins", 2)
@@ -109,10 +103,14 @@ Item {
     property int fastRepeatTimer: getSetting("fastRepeatTimer", 500)
     property int slowRepeatTimer: getSetting("slowRepeatTimer", 2000)
 
+    property int mediaWidth: getSetting("mediaWidth", 250)
+
     property int sliderThickness: getSetting("sliderThickness", 8)
 
     property int appletAppAmount: getSetting("appletAppAmount", 2)
     property int appletDrawrAmount: getSetting("appletDrawrAmount", 2)
+
+    property string globalFontFamily: getSetting("globalFontFamily", "Hack")
 
     // --- directorys ---
     readonly property string saveState: "$HOME/.config/quickshell/SaveStates_txt/"
@@ -122,7 +120,7 @@ Item {
     readonly property var editableKeys: [
         // --- COLOUR ---
         "achtergrondKleur", "popupAchtergrondKleur", "borderKleur", "accentKleur", "textKleur", "textColourLink", 
-        "negatiefTextKleur", "actiefWerkbaldKleur", "volleWerkbaldKleur", "legeWerkbaldKleur", "colourPink", 
+        "negatiefTextKleur", "actiefWerkbaldKleur", "volleWerkbaldKleur", "legeWerkbaldKleur", 
         "colourPowerButton", "colourAppPalet", "colourSettingsButton", 
 
         // --- INT ---

@@ -60,6 +60,7 @@ PopupWindow {
                 color: Style.textKleur2
 
                 font {
+                    family: Style.globalFontFamily
                     pixelSize: Style.fontGrootteL
                 }
             }
@@ -98,6 +99,7 @@ PopupWindow {
                 color: Style.textKleur2
 
                 font {
+                    family: Style.globalFontFamily
                     pixelSize: Style.fontGrootteL
                 }
             }
