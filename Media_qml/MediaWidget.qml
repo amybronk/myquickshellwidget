@@ -14,8 +14,8 @@ PopupWindow {
 
     property real currentPositionMs: MprisService.activePlayer ? MprisService.activePlayer.position : 0
 
-    implicitHeight: 800
-    implicitWidth: 800
+    implicitHeight: 530
+    implicitWidth: 410
 
     anchor {
         window: barWindow
@@ -67,10 +67,7 @@ PopupWindow {
             
             color: "transparent"
             radius: Style.radiusGrooteM
-            border {
-                color: Style.borderKleur
-                width: Style.mediaBorderSize
-            }
+
 
             // 1. Speler Selectie
             Row {
@@ -104,14 +101,20 @@ PopupWindow {
                         radius: Style.radiusGrooteM
                         border {
                             color: Style.borderKleur
-                            width: Style.borderSize
+                            width: Style.mediaBorderSize
                         }
 
                         Text {
                             anchors.centerIn: parent
                             text: modelData.identity
                             color: Style.textKleur
-                            font.pixelSize: Style.fontGrootteS
+
+                            font { 
+                                pixelSize: Style.fontGrootteL
+                                bold: true
+                                family: Style.globalFontFamily
+                            }
+
                             elide: Text.ElideRight
                             width: parent.width - 8
                             horizontalAlignment: Text.AlignHCenter
@@ -143,22 +146,28 @@ PopupWindow {
                     top: thumbnail.bottom
                     horizontalCenter: parent.horizontalCenter
 
-                    topMargin: 15
+                    topMargin: Style.uiMarginsL
                 }
 
                 border {
                     color: Style.borderKleur
-                    width: Style.borderSize
+                    width: Style.mediaBorderSize
                 }
 
                 height: titelText.implicitHeight + 15
                 width: Style.mediaWidth
+                radius: Style.radiusGrooteM
 
                 Text {
                     id: titelText
                     text: MprisService.activePlayer?.metadata["xesam:title"] ?? "Niets aan het spelen"
                     color: Style.textKleur
-                    font.bold: true
+                    
+                    font { 
+                        family: Style.globalFontFamily
+                        bold: true
+                    }
+
                     anchors { 
                         horizontalCenter: parent.horizontalCenter
                         verticalCenter: parent.verticalCenter
@@ -184,30 +193,33 @@ PopupWindow {
                     top: titelContainer.bottom
                     horizontalCenter: parent.horizontalCenter
 
-                    bottomMargin: Style.uiMarginsM
+                    topMargin: Style.uiMarginsL
                 }
 
                 border {
                     color: Style.borderKleur
-                    width: Style.borderSize
+                    width: Style.mediaBorderSize
                 }
 
                 height: Style.barHoogte
                 width: Style.mediaWidth
                 color: Style.popupAchtergrondKleur
+                radius: Style.radiusGrooteM
 
                 Item {
                     id: statusBar
 
                     anchors {
-                        fill: parent
+                        left: parent.left
+                        right: parent.right
+                        verticalCenter: parent.verticalCenter
 
                         topMargin: Style.uiMarginsM
                         rightMargin: Style.uiMarginsL
                         leftMargin: Style.uiMarginsL
                         bottomMargin: Style.uiMarginsM
                     }
-                    height: progressBar.implicitHeight || 20 // Gebruik de hoogte van je balk
+                    height: 12 // Gebruik de hoogte van je balk
 
                     MediaProgressBar {
                         id: progressBar
@@ -232,7 +244,7 @@ PopupWindow {
                 anchors {
                     top: uielementStatusBar.bottom
                     horizontalCenter: parent.horizontalCenter
-                    topMargin: Style.uiMarginsM
+                    topMargin: Style.uiMarginsL
                 }
                 height: Style.barHoogte
                 spacing: Style.uiMarginsS
@@ -273,7 +285,7 @@ PopupWindow {
             radius: Style.radiusGrooteM
             border {
                 color: Style.borderKleur
-                width: Style.borderSize
+                width: Style.mediaBorderSize
             }
 
             Volume_element {
@@ -297,229 +309,3 @@ PopupWindow {
         }
     }
 }
-//     Rectangle {
-//         id: rootui
-
-//         anchors {
-//             fill: parent
-//         }
-
-//         radius: Style.radiusGrooteM
-
-//         color: "transparent"
-        
-//         // --- main window ---
-//         Rectangle {
-//             id: mediarectangle
-//             anchors {
-//                 top: parent.top
-//                 left: parent.left
-//                 bottom: parent.bottom
-//             }
-//             width:500
-
-//             color: Style.popupAchtergrondKleur
-//             radius: Style.radiusGrooteM
-
-//             border {
-//                 color: Style.borderKleur
-//                 width: Style.borderSize
-//             }
-
-//             // --- player selector ---
-//             Row {
-//                 id: playerSelecter
-//                 width: mediawindow.width
-//                 height: Style.barHoogte
-//                 spacing: 2
-//                 anchors {
-//                     top: mediarectangle.top
-//                     left: mediarectangle.left
-//                     right: mediarectangle.right
-
-//                     topMargin: Style.uiMarginsM
-//                     leftMargin: Style.uiMarginsM
-//                     rightMargin: Style.uiMarginsM
-//                 }
-
-//                 Repeater {
-//                     model: MprisService.players
-
-//                     Rectangle {
-//                         required property MprisPlayer modelData
-//                         required property int index
-
-//                         width: MprisService.players.length > 0
-//                             ? (playerSelecter.width - playerSelecter.leftPadding - playerSelecter.rightPadding - (MprisService.players.length - 1) * playerSelecter.spacing) / MprisService.players.length
-//                             : playerSelecter.width - playerSelecter.leftPadding - playerSelecter.rightPadding
-
-//                         height: parent.height
-
-//                         color: MprisService.activePlayer === modelData
-//                             ? Style.accentKleur
-//                             : "transparent"
-
-//                         border {
-//                             color: Style.borderKleur
-//                             width: Style.borderSize
-//                         }
-
-//                         radius: Style.radiusGrooteM
-
-//                         Text {
-//                             anchors.centerIn: parent
-//                             text: modelData.identity
-//                             color: Style.textKleur
-//                             font.pixelSize: Style.fontGrootteS
-//                             elide: Text.ElideRight
-//                             width: parent.width - 8
-//                             horizontalAlignment: Text.AlignHCenter
-//                         }
-
-//                         HoverHandler {
-//                             cursorShape: Qt.PointingHandCursor
-//                         }
-
-//                         TapHandler {
-//                             onTapped: MprisService.selectPlayer(index)
-//                         }
-//                     }
-//                 }
-//             }
-
-//             // --- art / thumbnail ---
-
-//             Column {
-//                 spacing: 15
-//                 anchors {
-//                     top: playerSelecter.bottom
-//                     bottom: progressBar.top
-//                     topMargin: Style.uiMarginsL
-//                     horizontalCenter: playerSelecter.horizontalCenter
-//                 }
-
-//                 ThumbnailArt {
-//                     size: 180
-//                     anchors.horizontalCenter: parent.horizontalCenter
-//                     artUrl: MprisService.activePlayer?.metadata["mpris:artUrl"] ?? ""
-//                 }
-
-//                 // (Titel/Artiest)
-//                 Text {
-//                     text: MprisService.activePlayer?.metadata["xesam:title"] ?? "Niets aan het spelen"
-//                     color: Style.textKleur
-//                     font.bold: true
-//                     anchors.horizontalCenter: parent.horizontalCenter
-//                 }
-//             }
-
-//             // --- progres bar --- 
-//             Timer {
-//                 id: progressTimer
-//                 interval: Style.fastRepeatTimer 
-//                 running: MprisService.activePlayer && MprisService.activePlayer.playbackState === MprisPlaybackState.Playing
-//                 repeat: true
-//                 onTriggered: {
-//                     currentPositionMs = MprisService.activePlayer.position;
-//                 }
-//             }
-
-//             MediaProgressBar {
-//                 id: progressBar
-//                 anchors {
-//                     left: mediarectangle.left
-//                     right: mediarectangle.right
-//                     bottom: controlRow.top
-
-//                     rightMargin: Style.uiMarginsL
-//                     leftMargin: Style.uiMarginsL
-//                     bottomMargin: Style.uiMarginsM
-
-//                 }
-
-//                 position: currentPositionMs
-//                 length: MprisService.activePlayer ? MprisService.activePlayer.length : 1
-//                 isSeekable: MprisService.activePlayer ? MprisService.activePlayer.canSeek : false
-
-//                 onSeekRequested: (newPos) => {
-//                     if (MprisService.activePlayer) {
-//                         MprisService.activePlayer.position = newPos;
-//                         currentPositionMs = newPos;
-//                     }
-//                 }
-//             }
-
-//             // --- bestuur knoppen ---
-//             Row {
-//                 id: controlRow
-                
-//                 anchors {
-//                     bottom: mediarectangle.bottom
-//                     horizontalCenter: parent.horizontalCenter
-//                     leftMargin: Style.uiMarginsM
-//                     rightMargin: Style.uiMarginsM
-//                     bottomMargin: Style.uiMarginsM
-//                 }
-
-//                 height: Style.barHoogte
-//                 spacing: Style.uiMarginsS
-
-//                 Button_element { //previous button
-//                     text: "⏮"
-//                     onClicked: MprisService.previous()
-//                 }
-
-//                 Button_element { //play button
-//                     text: MprisService.activePlayer?.playbackState === MprisPlaybackState.Playing ? "⏸" : "▶"
-//                     onClicked: MprisService.playPause()
-//                     baseColor: Style.accentKleur
-//                 }
-
-//                 Button_element { //next button
-//                     text: "⏭"
-//                     onClicked: MprisService.next()
-//                 }
-//             }
-//         }
-
-//         // --- volume barre ---
-//         Rectangle {
-//             id: volumebar
-//             anchors {
-//                 top: parent.top
-//                 right: parent.right
-//                 bottom: parent.bottom
-//                 left: mediarectangle.right
-//                 leftMargin: Style.uiMarginsM
-//             }
-            
-//             color: Style.popupAchtergrondKleur
-//             radius: Style.radiusGrooteM
-
-//             border {
-//                 color: Style.borderKleur
-//                 width: Style.borderSize
-//             }
-
-//             Volume_element {
-//                 anchors {
-//                     horizontalCenter: parent.horizontalCenter
-//                     top: parent.top
-//                     bottom: mutebutton.top
-//                     topMargin: Style.uiMarginsL
-//                     bottomMargin: Style.uiMarginsL
-//                 }
-//             }
-
-//             MuteButton {
-//                 id: mutebutton
-
-//                 anchors {
-//                     horizontalCenter: parent.horizontalCenter
-//                     bottom: parent.bottom
-//                     bottomMargin: Style.uiMarginsL
-//                 }
-//             }
-//         }
-//     }
-// }

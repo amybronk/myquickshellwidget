@@ -103,7 +103,7 @@ Item {
     property int fastRepeatTimer: getSetting("fastRepeatTimer", 500)
     property int slowRepeatTimer: getSetting("slowRepeatTimer", 2000)
 
-    property int mediaWidth: getSetting("mediaWidth", 250)
+    property int mediaWidth: getSetting("mediaWidth", 340)
 
     property int sliderThickness: getSetting("sliderThickness", 8)
 
